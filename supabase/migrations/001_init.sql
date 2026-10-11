@@ -27,11 +27,6 @@ create policy "service role can read page_views"
 
 create index if not exists page_views_created_at_idx on public.page_views (created_at desc);
 create index if not exists page_views_path_idx       on public.page_views (path);
-
--- ---------------------------------------------------------------------------
--- 2. contact_messages : stores messages from the contact form
---    Anyone may INSERT. Only service_role (admin dashboard) may SELECT/UPDATE.
--- ---------------------------------------------------------------------------
 create table if not exists public.contact_messages (
   id         bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
