@@ -28,7 +28,7 @@ export default function Projects() {
         <SectionHeading
           eyebrow="Projects"
           title="Selected work"
-          description="A mix of web applications and console programs. Each one was built to solve a real, practical problem."
+          description="A mix of web applications and console programs — mostly AI-assisted learning builds that I read, checked and learned from. Each one solved a real, practical problem."
         />
 
         <div className="mt-8 flex flex-wrap gap-2">
