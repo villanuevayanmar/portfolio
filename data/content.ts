@@ -1,7 +1,3 @@
-// ---------------------------------------------------------------------------
-// Single source of truth for all site content. Edit here, not in components.
-// ---------------------------------------------------------------------------
-
 export const profile = {
   name: "Yanmar Villanueva",
   role: "BSIT Student | Aspiring Web Developer",
@@ -10,10 +6,10 @@ export const profile = {
   github: "https://github.com/villanuevayanmar",
   status: "Open to part-time work",
   summary:
-    "First-year BSIT student building practical tools in C, Python and JavaScript. I focus on clear, working solutions and I am actively looking for part-time work to support my studies while I keep improving.",
+    "First-year BSIT student learning the fundamentals of C, Python and JavaScript, and learning to build well with AI — reading, checking and fixing the code instead of just copying it. Actively looking for part-time work to support my studies.",
   about: [
     "I came into the BSIT program from the ABM strand, so programming was completely new to me at the start. I now work with the fundamentals of C, Python and JavaScript, and I have built small but real projects to put those fundamentals into practice.",
-    "The two web applications I am most proud of are a student sinking fund tracker and a budget tracker. Both came from a genuine record-keeping need, and both are live and stored on GitHub.",
+    "Most of the projects below are AI-assisted learning builds — web apps and small C programs. I use AI to move faster, but my goal is to understand every part: to read the code it gives me, catch what is wrong, and fix it myself. Each one has taught me how a real program fits together, and each is live on GitHub.",
   ],
   lookingFor:
     "Part-time work and opportunities where I can contribute and earn a reasonable income to support my studies, while continuing to learn and sharpen my coding skills.",
@@ -31,6 +27,15 @@ export type Project = {
 
 export const projects: Project[] = [
   {
+    title: "Pig Farm Ledger",
+    description:
+      "A piggery accounting web app with account sign-in: each user keeps a private ledger of expenses and sales, visible only to their account. Built with AI assistance as a learning project.",
+    tags: ["TypeScript", "React", "Authentication"],
+    category: "Web",
+    liveUrl: "https://pig-ledger-pi.vercel.app/",
+    repoUrl: "https://github.com/villanuevayanmar/pig-ledger",
+  },
+  {
     title: "Student Sinking Fund Tracker",
     description:
       "A web app for recording a class sinking fund: manage a roster, log dated payments, and view a month grid of paid and unpaid days with peso totals. Data is saved in the browser.",
@@ -38,7 +43,6 @@ export const projects: Project[] = [
     category: "Web",
     liveUrl: "https://villanuevayanmar.github.io/Sinking/",
     repoUrl: "https://github.com/villanuevayanmar/Sinking",
-    featured: true,
   },
   {
     title: "Budget Tracker",
