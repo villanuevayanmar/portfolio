@@ -1,13 +1,3 @@
--- ============================================================================
--- Portfolio database schema
--- Run this entire file in the Supabase Dashboard -> SQL Editor -> New query.
--- ============================================================================
-
--- ---------------------------------------------------------------------------
--- 1. page_views : anonymous visitor tracking
---    Anyone (anon) may INSERT a visit. Only the service_role (admin dashboard)
---    may SELECT. This keeps analytics private while allowing public tracking.
--- ---------------------------------------------------------------------------
 create table if not exists public.page_views (
   id         bigint generated always as identity primary key,
   created_at timestamptz not null default now(),
