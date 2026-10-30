@@ -1,30 +1,25 @@
 import type { Config } from "tailwindcss";
 
 const config: Config = {
-  darkMode: "class",
-  content: [
-    "./app/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./data/**/*.{ts,tsx}",
-  ],
+  content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./data/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        // Professional neutral palette with a single restrained accent.
-        brand: {
-          DEFAULT: "#2563eb", // blue-600
-          foreground: "#ffffff",
-        },
+        brand: { DEFAULT: "#fa684a", foreground: "#ffffff" },
+        paper: "#f4f1e9",
+        ink: "#18232e",
+        coral: "#fa684a",
+        acid: "#d2f66f",
+        muted: "#68737c",
       },
       fontFamily: {
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        serif: ["var(--font-serif)", "Georgia", "serif"],
       },
       container: {
         center: true,
-        padding: "1.5rem",
-        screens: {
-          "2xl": "1200px",
-        },
+        padding: "1.25rem",
+        screens: { "2xl": "1440px" },
       },
     },
   },

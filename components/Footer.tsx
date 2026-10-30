@@ -1,13 +1,14 @@
+import { ArrowUpRight } from "lucide-react";
 import { profile } from "@/data/content";
 
 export default function Footer() {
   return (
-    <footer className="border-t border-slate-200 dark:border-slate-800">
-      <div className="container flex flex-col items-center justify-between gap-4 py-8 text-sm text-slate-500 sm:flex-row dark:text-slate-400">
-        <p>
-          © {new Date().getFullYear()} {profile.name}. All rights reserved.
-        </p>
-        <p>Built with Next.js, Tailwind CSS and Supabase.</p>
+    <footer className="bg-ink text-paper">
+      <div className="container flex flex-col gap-4 border-t border-white/10 py-7 text-xs text-paper/50 sm:flex-row sm:items-center sm:justify-between">
+        <p>© {new Date().getFullYear()} {profile.name}. Built with curiosity.</p>
+        <a href="#home" className="inline-flex items-center gap-2 font-semibold uppercase tracking-[0.14em] transition hover:text-acid">
+          Back to top <ArrowUpRight size={14} />
+        </a>
       </div>
     </footer>
   );

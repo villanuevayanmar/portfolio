@@ -1,55 +1,33 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { Providers } from "@/components/Providers";
+import { Inter, Playfair_Display } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
-import VisitorTracker from "@/components/VisitorTracker";
 import "./globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
-});
+const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
+const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif", display: "swap" });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://villanuevayanmar.github.io"),
   title: {
-    default: "Yanmar Villanueva | BSIT Student & Aspiring Developer",
-    template: "%s | Yanmar Villanueva",
+    default: "Yanmar Villanueva — Portfolio",
+    template: "%s — Yanmar Villanueva",
   },
-  description:
-    "Portfolio of Yanmar Villanueva, a first-year BSIT student building practical tools in C, Python and JavaScript. Open to part-time work.",
-  keywords: [
-    "Yanmar Villanueva",
-    "BSIT",
-    "Portfolio",
-    "Web Developer",
-    "Philippines",
-    "Next.js",
-  ],
+  description: "A collection of projects, experiments, and practical digital tools by Yanmar Villanueva.",
+  keywords: ["Yanmar Villanueva", "Portfolio", "Web development", "Software projects", "Philippines"],
   openGraph: {
-    title: "Yanmar Villanueva | BSIT Student & Aspiring Developer",
-    description:
-      "First-year BSIT student building practical tools in C, Python and JavaScript.",
+    title: "Yanmar Villanueva — Portfolio",
+    description: "A collection of projects, experiments, and practical digital tools.",
     type: "website",
   },
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} font-sans`}>
-        <Providers>
-          <Navbar />
-          <main>{children}</main>
-          <Footer />
-          <VisitorTracker />
-        </Providers>
+    <html lang="en">
+      <body className={inter.variable + " " + playfair.variable + " font-sans"}>
+        <Navbar />
+        <main>{children}</main>
+        <Footer />
       </body>
     </html>
   );

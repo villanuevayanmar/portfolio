@@ -1,104 +1,108 @@
 export const profile = {
   name: "Yanmar Villanueva",
-  role: "BSIT Student | Aspiring Web Developer",
+  role: "IT Student • Developer",
   location: "Philippines",
   email: "villanuevayanmar@gmail.com",
   github: "https://github.com/villanuevayanmar",
-  status: "Open to part-time work",
+  status: "Always learning. Always building.",
   summary:
-    "First-year BSIT student learning the fundamentals of C, Python and JavaScript, and learning to build well with AI — reading, checking and fixing the code instead of just copying it. Actively looking for part-time work to support my studies.",
+    "I like turning everyday problems into useful digital tools. I build web apps, trackers, and small experiments while learning how to make software clearer, faster, and easier to use.",
   about: [
-    "I came into the BSIT program from the ABM strand, so programming was completely new to me at the start. I now work with the fundamentals of C, Python and JavaScript, and I have built small but real projects to put those fundamentals into practice.",
-    "Most of the projects below are AI-assisted learning builds — web apps and small C programs. I use AI to move faster, but my goal is to understand every part: to read the code it gives me, catch what is wrong, and fix it myself. Each one has taught me how a real program fits together, and each is live on GitHub.",
+    "I'm interested in technology, problem solving, and the process of turning an idea into something people can actually use. I enjoy building practical tools, exploring new technologies, and improving the small details that make an application feel complete.",
+    "My projects range from personal finance and utility tools to a farm recordkeeping app and a match tracker. Each project gives me a chance to learn something new, work through problems, and make the next version better.",
   ],
   lookingFor:
-    "Part-time work and opportunities where I can contribute and earn a reasonable income to support my studies, while continuing to learn and sharpen my coding skills.",
+    "A little about what I enjoy, what I build, and the ideas I'm exploring through code.",
 };
 
 export type Project = {
   title: string;
   description: string;
   tags: string[];
-  category: "Web" | "Console";
+  category: "Web" | "Utility";
   liveUrl?: string;
   repoUrl?: string;
   featured?: boolean;
+  mark: string;
+  tone: "coral" | "blue" | "lime" | "violet" | "amber";
 };
 
 export const projects: Project[] = [
   {
-    title: "Pig Farm Ledger",
+    title: "Pig Ledger",
     description:
-      "A piggery accounting web app with account sign-in: each user keeps a private ledger of expenses and sales, visible only to their account. Built with AI assistance as a learning project.",
-    tags: ["TypeScript", "React", "Authentication"],
+      "A mobile-friendly farm recordkeeping app for managing batches, feed use, expenses, sales, and cycle profitability in one place.",
+    tags: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "PWA"],
     category: "Web",
     liveUrl: "https://pig-ledger-pi.vercel.app/",
     repoUrl: "https://github.com/villanuevayanmar/pig-ledger",
+    featured: true,
+    mark: "PL",
+    tone: "coral",
   },
   {
-    title: "Student Sinking Fund Tracker",
+    title: "MLBB Match Tracker",
     description:
-      "A web app for recording a class sinking fund: manage a roster, log dated payments, and view a month grid of paid and unpaid days with peso totals. Data is saved in the browser.",
-    tags: ["JavaScript", "HTML", "CSS", "localStorage"],
+      "A two-player match tracker for recording heroes, results, KDA, medals, and challenges, with stats calculated from match history.",
+    tags: ["React", "TypeScript", "Vite", "Zustand"],
     category: "Web",
+    repoUrl: "https://github.com/villanuevayanmar/ml",
+    featured: true,
+    mark: "ML",
+    tone: "blue",
+  },
+  {
+    title: "Kuryente",
+    description:
+      "An electricity bill calculator that estimates usage and cost from meter readings, keeps a reading history, and saves data on the device.",
+    tags: ["JavaScript", "HTML", "CSS", "localStorage"],
+    category: "Utility",
+    repoUrl: "https://github.com/villanuevayanmar/kuryente",
+    mark: "₱",
+    tone: "lime",
+  },
+  {
+    title: "Sinking Fund Tracker",
+    description:
+      "A simple class fund tracker for managing a member list, recording payments, and reviewing daily and monthly totals.",
+    tags: ["JavaScript", "HTML", "CSS", "localStorage"],
+    category: "Utility",
     liveUrl: "https://villanuevayanmar.github.io/Sinking/",
     repoUrl: "https://github.com/villanuevayanmar/Sinking",
+    mark: "SF",
+    tone: "violet",
   },
   {
     title: "Budget Tracker",
     description:
-      "A personal budgeting tool that logs income and expenses and shows a running net balance, with a simple history view.",
+      "A lightweight budgeting tool for logging income and expenses and keeping an eye on the balance over time.",
     tags: ["JavaScript", "HTML", "CSS"],
-    category: "Web",
+    category: "Utility",
     liveUrl: "https://villanuevayanmar.github.io/Budget-Tracker/",
     repoUrl: "https://github.com/villanuevayanmar/Budget-Tracker",
-  },
-  {
-    title: "Electricity Bill Calculator",
-    description:
-      "A console program in C that computes an electricity bill from previous and current kWh readings and a rate, with input validation.",
-    tags: ["C", "Console"],
-    category: "Console",
-  },
-  {
-    title: "Four-Function Calculator",
-    description:
-      "A command-line calculator in C that handles addition, subtraction, multiplication and division, including division-by-zero and invalid-operator handling.",
-    tags: ["C", "Console"],
-    category: "Console",
+    mark: "BT",
+    tone: "amber",
   },
 ];
 
 export type SkillGroup = { group: string; items: string[] };
 
 export const skillGroups: SkillGroup[] = [
-  {
-    group: "Programming Languages",
-    items: ["C", "Python", "JavaScript"],
-  },
-  {
-    group: "Web Basics",
-    items: ["HTML", "CSS"],
-  },
-  {
-    group: "Tools",
-    items: ["VS Code", "Command Line", "Git", "GitHub"],
-  },
-  {
-    group: "Ways of Working",
-    items: ["Problem Solving", "Consistency", "Attention to Detail"],
-  },
+  { group: "Languages", items: ["JavaScript", "TypeScript", "C", "Python"] },
+  { group: "Web development", items: ["HTML", "CSS", "React", "Next.js", "Tailwind CSS"] },
+  { group: "Tools", items: ["VS Code", "Vite", "Git", "GitHub"] },
+  { group: "Data & storage", items: ["Supabase", "PostgreSQL", "Browser storage"] },
 ];
 
 export const education = [
   {
-    school: "Cebu Technological University - Naga Extension Campus",
-    detail: "BS in Information Technology, 1st Year",
-    period: "Present",
+    school: "Cebu Technological University — Naga Extension Campus",
+    detail: "Bachelor of Science in Information Technology",
+    period: "Current",
   },
   {
     school: "Senior High School",
     detail: "ABM Strand",
-    period: "Graduated",
+    period: "Completed",
   },
 ];
