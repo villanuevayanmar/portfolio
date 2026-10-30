@@ -21,7 +21,7 @@ export default function Hero() {
           <div className="mb-7 flex items-center gap-4">
             <div className="group relative h-[4.5rem] w-[4.5rem] shrink-0 rounded-full border-2 border-acid/80 p-1 shadow-[0_0_26px_rgba(210,246,111,0.12)] transition duration-500 hover:rotate-3 hover:scale-105 hover:shadow-[0_0_34px_rgba(210,246,111,0.24)]">
               <Image
-                src="/images/yanmar-profile.webp"
+                src="/images/yian.jpg"
                 alt="Yanmar Villanueva"
                 width={192}
                 height={192}
