@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowDownRight, ArrowUpRight, Github, Mail, Terminal } from "lucide-react";
 import { profile, projects } from "@/data/content";
 
@@ -17,6 +18,26 @@ export default function Hero() {
       <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-16 h-[28rem] w-[28rem] rounded-full border border-coral/10" />
       <div className="container relative grid gap-14 pb-14 pt-16 sm:pt-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:pb-20">
         <div className="hero-intro">
+          <div className="mb-7 flex items-center gap-4">
+            <div className="group relative h-[4.5rem] w-[4.5rem] shrink-0 rounded-full border-2 border-acid/80 p-1 shadow-[0_0_26px_rgba(210,246,111,0.12)] transition duration-500 hover:rotate-3 hover:scale-105 hover:shadow-[0_0_34px_rgba(210,246,111,0.24)]">
+              <Image
+                src="/images/profile.webp"
+                alt="Yanmar Villanueva"
+                width={192}
+                height={192}
+                priority
+                className="h-full w-full rounded-full object-cover"
+              />
+              <span aria-hidden="true" className="absolute bottom-1 right-0 h-3 w-3 rounded-full border-2 border-[#080d15] bg-acid shadow-[0_0_12px_rgba(210,246,111,0.7)]" />
+            </div>
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.12em] text-paper">Yanmar Villanueva</p>
+              <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.16em] text-paper/45">IT Student · Experimental Vibe Coder</p>
+              <p className="mt-2 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.14em] text-acid/75">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-acid" /> Available for opportunities
+              </p>
+            </div>
+          </div>
           <div className="flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.22em] text-paper/55 sm:text-[11px]">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-acid opacity-50" />
