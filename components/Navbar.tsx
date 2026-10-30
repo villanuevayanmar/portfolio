@@ -12,6 +12,19 @@ const links = [
   { href: "#contact", label: "Contact" },
 ];
 
+function YVMark() {
+  return (
+    <span className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-xl border border-acid/25 bg-[#111b29] shadow-[0_0_22px_rgba(210,246,111,0.08)] transition duration-300 group-hover:-rotate-3 group-hover:border-acid/70 group-hover:shadow-[0_0_28px_rgba(210,246,111,0.16)]">
+      <svg viewBox="0 0 48 48" className="h-8 w-8" fill="none" aria-hidden="true">
+        <path d="M5.5 9.5L16.5 21.5L27.5 9.5M16.5 21.5V38" stroke="#D2F66F" strokeWidth="3.8" strokeLinecap="round" strokeLinejoin="round" />
+        <path d="M24.5 20.5L31.5 38L42 12" stroke="#FA684A" strokeWidth="3.8" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="39.5" cy="8.5" r="2" fill="#D2F66F" />
+      </svg>
+      <span className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-inset ring-white/[0.04]" />
+    </span>
+  );
+}
+
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
@@ -19,8 +32,8 @@ export default function Navbar() {
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#080d15]/95 text-paper backdrop-blur-xl">
       <nav className="container flex h-[4.5rem] items-center justify-between">
         <Link href="/" aria-label={profile.name + " home"} className="group inline-flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center bg-acid text-sm font-black tracking-[-0.08em] text-ink transition group-hover:rotate-[-8deg]">Y/</span>
-          <span className="text-sm font-black tracking-[-0.03em] text-paper">YANMAR<span className="text-coral">.</span></span>
+          <YVMark />
+          <span className="text-sm font-black tracking-[0.04em] text-paper">YANMAR<span className="text-coral">.</span></span>
           <span className="hidden border-l border-white/15 pl-3 font-mono text-[9px] uppercase tracking-[0.16em] text-paper/40 sm:inline">Creative lab</span>
         </Link>
 
