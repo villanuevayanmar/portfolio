@@ -43,17 +43,6 @@ export const projects: Project[] = [
     tone: "coral",
   },
   {
-    title: "MLBB Match Tracker",
-    description:
-      "A two-player match tracker for recording heroes, results, KDA, medals, and challenges, with stats calculated from match history.",
-    tags: ["React", "TypeScript", "Vite", "Zustand"],
-    category: "Web",
-    repoUrl: "https://github.com/villanuevayanmar/ml",
-    featured: true,
-    mark: "ML",
-    tone: "blue",
-  },
-  {
     title: "Kuryente",
     description:
       "An electricity bill calculator that estimates usage and cost from meter readings, keeps a reading history, and saves data on the device.",
