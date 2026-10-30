@@ -13,6 +13,11 @@ export const metadata: Metadata = {
     template: "%s — Yanmar Villanueva",
   },
   description: "A collection of projects, experiments, and practical digital tools by Yanmar Villanueva.",
+  icons: {
+    icon: [{ url: "/favicon.svg?v=2", type: "image/svg+xml" }],
+    shortcut: ["/favicon.svg?v=2"],
+    apple: [{ url: "/favicon.svg?v=2", type: "image/svg+xml" }],
+  },
   keywords: ["Yanmar Villanueva", "Portfolio", "Web development", "Software projects", "Philippines"],
   openGraph: {
     title: "Yanmar Villanueva — Portfolio",
