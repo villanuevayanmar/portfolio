@@ -16,7 +16,7 @@ export default function Hero() {
       <div aria-hidden="true" className="pointer-events-none absolute -right-40 -top-36 h-[36rem] w-[36rem] rounded-full border border-acid/10" />
       <div aria-hidden="true" className="pointer-events-none absolute -right-20 -top-16 h-[28rem] w-[28rem] rounded-full border border-coral/10" />
       <div className="container relative grid gap-14 pb-14 pt-16 sm:pt-24 lg:grid-cols-[1.05fr_0.95fr] lg:items-center lg:gap-16 lg:pb-20">
-        <div>
+        <div className="hero-intro">
           <div className="flex flex-wrap items-center gap-3 text-[10px] font-bold uppercase tracking-[0.22em] text-paper/55 sm:text-[11px]">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-acid opacity-50" />
@@ -29,17 +29,17 @@ export default function Hero() {
             <span>Open to opportunities</span>
           </div>
 
-          <h1 className="mt-8 max-w-4xl text-[clamp(3.6rem,7.7vw,7.2rem)] font-black leading-[0.88] tracking-[-0.075em]">
+          <h1 className="hero-heading mt-8 max-w-4xl text-[clamp(3.6rem,7.7vw,7.2rem)] font-black leading-[0.88] tracking-[-0.075em]">
             Real ideas.
             <br />
             Rapid prompts.
             <br />
-            <span className="font-serif font-normal italic tracking-[-0.065em] text-coral">Working software.</span>
+            <span className="hero-accent font-serif font-normal italic tracking-[-0.065em] text-coral">Working software.</span>
           </h1>
 
-          <p className="mt-8 max-w-xl text-base leading-8 text-paper/65 sm:text-lg">{profile.summary}</p>
+          <p className="hero-copy mt-8 max-w-xl text-base leading-8 text-paper/65 sm:text-lg">{profile.summary}</p>
 
-          <div className="mt-9 flex flex-wrap gap-3">
+          <div className="hero-actions mt-9 flex flex-wrap gap-3">
             <a href="#projects" className="group inline-flex items-center gap-3 bg-acid px-5 py-3.5 text-sm font-bold text-ink transition hover:-translate-y-1 hover:bg-white">
               Explore my work
               <ArrowDownRight size={17} className="transition group-hover:translate-x-0.5 group-hover:translate-y-0.5" />
@@ -53,10 +53,13 @@ export default function Hero() {
           </div>
         </div>
 
-        <aside aria-label="A visual of my build workflow" className="relative mx-auto w-full max-w-xl lg:ml-auto">
+        <aside aria-label="A visual of my build workflow" className="hero-terminal-wrap hero-intro-delay relative mx-auto w-full max-w-xl lg:ml-auto">
+          <div aria-hidden="true" className="terminal-orbit absolute left-1/2 top-1/2 h-[112%] aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full border border-acid/[0.08]" />
+          <div aria-hidden="true" className="terminal-orbit terminal-orbit-reverse absolute left-1/2 top-1/2 h-[94%] aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full border border-coral/[0.08]" />
           <div aria-hidden="true" className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-acid/15 via-transparent to-coral/15 blur-xl" />
-          <div className="group relative overflow-hidden rounded-xl border border-white/15 bg-[#0d1521]/95 shadow-[0_24px_90px_rgba(0,0,0,0.45)] transition duration-500 hover:-translate-y-1 hover:border-acid/30 hover:shadow-[0_28px_100px_rgba(0,0,0,0.6)]">
-            <div className="flex items-center justify-between border-b border-white/10 bg-white/[0.035] px-4 py-3">
+          <div className="terminal-panel group relative overflow-hidden rounded-xl border border-white/15 bg-[#0d1521]/95 shadow-[0_24px_90px_rgba(0,0,0,0.45)] transition duration-500 hover:-translate-y-1 hover:border-acid/30 hover:shadow-[0_28px_100px_rgba(0,0,0,0.6)]">
+            <span aria-hidden="true" className="terminal-scan" />
+            <div className="relative z-10 flex items-center justify-between border-b border-white/10 bg-white/[0.035] px-4 py-3">
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-coral" />
                 <span className="h-2.5 w-2.5 rounded-full bg-[#f5ce75]" />
@@ -64,29 +67,30 @@ export default function Hero() {
                 <span className="ml-3 font-mono text-[10px] text-paper/55 sm:text-xs">yanmar@creative-lab</span>
               </div>
               <span className="inline-flex items-center gap-2 font-mono text-[10px] text-acid">
+                <span className="terminal-live-dot h-1.5 w-1.5 rounded-full bg-acid" />
                 <Terminal size={13} /> WORKFLOW.LOG
               </span>
             </div>
 
-            <div className="space-y-5 p-5 font-mono text-xs leading-6 sm:p-7 sm:text-sm">
-              <div>
+            <div className="relative z-10 space-y-5 p-5 font-mono text-xs leading-6 sm:p-7 sm:text-sm">
+              <div className="terminal-step terminal-step-one">
                 <p className="text-paper/40"># start with something real</p>
                 <p className="text-paper"><span className="mr-2 text-acid">$</span>define_problem(<span className="text-coral">"everyday need"</span>)</p>
                 <p className="pl-5 text-paper/55">↳ Pig Ledger · farm recordkeeping</p>
               </div>
-              <div>
+              <div className="terminal-step terminal-step-two">
                 <p className="text-paper/40"># explore, build, and improve</p>
                 <p className="text-paper"><span className="mr-2 text-acid">$</span>prototype(<span className="text-coral">"with AI + curiosity"</span>)</p>
                 <p className="pl-5 text-paper/55">↳ prompt · test · debug · refine</p>
               </div>
-              <div>
+              <div className="terminal-step terminal-step-three">
                 <p className="text-paper/40"># make the idea useful</p>
                 <p className="text-paper"><span className="mr-2 text-acid">$</span>ship(<span className="text-coral">"working software"</span>)</p>
                 <p className="pl-5 text-acid">↳ deployed · still learning <span className="animate-pulse">▍</span></p>
               </div>
             </div>
 
-            <a href="#projects" className="group flex items-center justify-between border-t border-white/10 bg-white/[0.025] px-5 py-4 transition hover:bg-white/[0.06] sm:px-7">
+            <a href="#projects" className="relative z-10 group flex items-center justify-between border-t border-white/10 bg-white/[0.025] px-5 py-4 transition hover:bg-white/[0.06] sm:px-7">
               <span>
                 <span className="block font-mono text-[9px] uppercase tracking-[0.2em] text-paper/40">Real-world build / featured</span>
                 <span className="mt-1 block text-sm font-bold text-paper">Pig Ledger</span>
