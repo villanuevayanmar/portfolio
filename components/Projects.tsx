@@ -24,9 +24,10 @@ export default function Projects() {
   );
 
   return (
-    <section id="projects" className="scroll-mt-20 border-b border-ink/10 bg-[#ebe8df]">
-      <div className="container py-20 md:py-28">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
+    <section id="projects" className="cyber-grid relative scroll-mt-20 overflow-hidden border-b border-white/10 bg-[#080d15] text-paper">
+      <div aria-hidden="true" className="ambient-glow pointer-events-none absolute -right-40 top-1/4 h-96 w-96 rounded-full border border-coral/[0.07]" />
+      <div className="container relative py-20 md:py-28">
+        <div className="motion-in flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
             eyebrow="02 / Project archive"
             title="Experiments with a purpose."
@@ -37,21 +38,20 @@ export default function Projects() {
               const active = filter === item;
               return (
                 <button key={item} type="button" aria-pressed={active} onClick={() => setFilter(item)}
-                  className={"border px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] transition " +
-                    (active ? "border-ink bg-ink text-paper" : "border-ink/20 bg-transparent text-ink/60 hover:border-coral hover:text-ink")}>
+                  className={"border px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] transition duration-300 " +
+                    (active ? "border-acid bg-acid text-ink shadow-[0_0_22px_rgba(210,246,111,0.12)]" : "border-white/15 bg-white/[0.025] text-paper/60 hover:border-coral hover:bg-white/[0.06] hover:text-paper")}>
                   {item}
                 </button>
               );
             })}
           </div>
         </div>
-
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {visible.map((project) => {
             const number = String(projects.indexOf(project) + 1).padStart(2, "0");
             return (
-              <article key={project.title} className="group flex h-full flex-col border border-ink/15 bg-paper p-3 transition duration-300 hover:-translate-y-1 hover:border-ink/40 hover:shadow-[8px_8px_0_#18232e]">
-                <div className={"relative flex min-h-40 items-end justify-between overflow-hidden p-6 " + toneClasses[project.tone]}>
+              <article key={project.title} className="motion-in group flex h-full flex-col rounded-xl border border-white/10 bg-[#0d1521]/95 p-3 shadow-[0_12px_45px_rgba(0,0,0,0.16)] transition duration-300 hover:-translate-y-1 hover:border-acid/30 hover:shadow-[8px_8px_0_rgba(210,246,111,0.75)]">
+                <div className={"relative flex min-h-40 items-end justify-between overflow-hidden rounded-lg p-6 " + toneClasses[project.tone]}>
                   <span className="absolute right-5 top-3 font-mono text-[10px] font-bold tracking-[0.2em] opacity-60">PROJECT / {number}</span>
                   <span className="text-[5.5rem] font-black leading-none tracking-[-0.08em] sm:text-[6.5rem]">{project.mark}</span>
                   {project.featured
@@ -60,40 +60,28 @@ export default function Projects() {
                   <span aria-hidden="true" className="absolute -right-3 -top-12 h-36 w-36 rounded-full border border-current/20 transition duration-500 group-hover:scale-125" />
                   <span aria-hidden="true" className="absolute right-10 -top-5 h-24 w-24 rounded-full border border-current/20 transition duration-500 group-hover:-translate-x-2 group-hover:translate-y-2" />
                 </div>
-
                 <div className="flex flex-1 flex-col px-4 pb-4 pt-5 sm:px-5">
                   <div className="flex items-center justify-between gap-4">
-                    <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-coral">{project.category}</span>
-                    <span className="text-right text-[10px] font-semibold uppercase tracking-[0.14em] text-muted">{project.tags.slice(0, 2).join(" · ")}</span>
+                    <span className="font-mono text-[10px] font-bold uppercase tracking-[0.18em] text-acid">{project.category}</span>
+                    <span className="text-right text-[10px] font-semibold uppercase tracking-[0.14em] text-paper/40">{project.tags.slice(0, 2).join(" · ")}</span>
                   </div>
-                  <h3 className="mt-3 text-2xl font-black tracking-[-0.045em] text-ink">{project.title}</h3>
-                  <p className="mt-3 flex-1 text-sm leading-7 text-muted">{project.description}</p>
+                  <h3 className="mt-3 text-2xl font-black tracking-[-0.045em] text-paper">{project.title}</h3>
+                  <p className="mt-3 flex-1 text-sm leading-7 text-paper/55">{project.description}</p>
                   <div className="mt-5 flex flex-wrap gap-2">
-                    {project.tags.map((tag) => <span key={tag} className="border border-ink/10 bg-white/60 px-2.5 py-1 font-mono text-[10px] text-ink/65">{tag}</span>)}
+                    {project.tags.map((tag) => <span key={tag} className="rounded-sm border border-white/10 bg-white/[0.035] px-2.5 py-1 font-mono text-[10px] text-paper/60">{tag}</span>)}
                   </div>
-                  <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-ink/10 pt-4">
-                    {project.liveUrl ? (
-                      <a href={project.liveUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-ink transition hover:text-coral">
-                        <ExternalLink size={14} /> Live preview
-                      </a>
-                    ) : null}
-                    {project.repoUrl ? (
-                      <a href={project.repoUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-ink transition hover:text-coral">
-                        <Github size={14} /> Source code <ArrowUpRight size={13} />
-                      </a>
-                    ) : null}
+                  <div className="mt-6 flex flex-wrap items-center gap-4 border-t border-white/10 pt-4">
+                    {project.liveUrl ? <a href={project.liveUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-paper transition hover:text-acid"><ExternalLink size={14} /> Live preview</a> : null}
+                    {project.repoUrl ? <a href={project.repoUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-paper transition hover:text-coral"><Github size={14} /> Source code <ArrowUpRight size={13} /></a> : null}
                   </div>
                 </div>
               </article>
             );
           })}
         </div>
-
-        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-ink/15 pt-5">
-          <p className="font-mono text-xs text-muted">SHOWING {String(visible.length).padStart(2, "0")} / {String(projects.length).padStart(2, "0")} PROJECTS</p>
-          <a href="https://github.com/villanuevayanmar" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-ink transition hover:text-coral">
-            More on GitHub <ArrowUpRight size={16} />
-          </a>
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-white/10 pt-5">
+          <p className="font-mono text-xs text-paper/40">SHOWING {String(visible.length).padStart(2, "0")} / {String(projects.length).padStart(2, "0")} PROJECTS</p>
+          <a href="https://github.com/villanuevayanmar" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 text-sm font-bold text-paper transition hover:text-acid">More on GitHub <ArrowUpRight size={16} /></a>
         </div>
       </div>
     </section>
