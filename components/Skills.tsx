@@ -8,9 +8,9 @@ export default function Skills() {
       <div className="container py-20 md:py-28">
         <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div>
-            <SectionHeading eyebrow="03 / Toolkit" title="Tools of the trade." description="The technologies I use, practise with, and keep exploring as I build." />
+            <SectionHeading eyebrow="03 / Toolkit" title="Tools, curiosity, and experiments." description="The technologies I use, practise with, and keep exploring as I build." />
             <p className="mt-8 max-w-sm border-l-2 border-coral pl-4 text-sm leading-7 text-muted">
-              This list grows as I take on new projects. Some tools are familiar, while others are still part of the learning process.
+              This list grows as I take on new projects. Some tools are familiar, while others are still part of the learning process. AI helps me move faster, but testing and understanding the result are still part of the work.
             </p>
           </div>
           <div className="grid gap-0 sm:grid-cols-2">
@@ -22,7 +22,7 @@ export default function Skills() {
                 </div>
                 <ul className="mt-5 flex flex-wrap gap-2">
                   {group.items.map((item) => (
-                    <li key={item} className="border border-ink/15 px-3 py-2 text-sm font-semibold text-ink transition hover:border-coral hover:bg-acid">{item}</li>
+                    <li key={item} className="border border-ink/15 px-3 py-2 text-sm font-semibold text-ink transition hover:-translate-y-0.5 hover:border-coral hover:bg-acid">{item}</li>
                   ))}
                 </ul>
               </div>

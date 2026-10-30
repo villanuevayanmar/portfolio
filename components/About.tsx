@@ -1,5 +1,4 @@
 import { ArrowUpRight } from "lucide-react";
-import SectionHeading from "./SectionHeading";
 import { education, profile } from "@/data/content";
 
 export default function About() {
@@ -7,8 +6,8 @@ export default function About() {
     <section id="about" className="scroll-mt-20 border-b border-ink/10 bg-paper">
       <div className="container grid gap-12 py-20 md:py-28 lg:grid-cols-[0.7fr_1.3fr] lg:gap-24">
         <div>
-          <p className="section-kicker">01 / About</p>
-          <h2 className="mt-5 max-w-sm text-4xl font-black leading-[0.98] tracking-[-0.06em] text-ink sm:text-5xl">A little context behind the code.</h2>
+          <p className="section-kicker">01 / About the builder</p>
+          <h2 className="mt-5 max-w-sm text-4xl font-black leading-[0.98] tracking-[-0.06em] text-ink sm:text-5xl">Curiosity is where the code begins.</h2>
           <p className="mt-6 max-w-sm text-sm leading-7 text-muted">{profile.lookingFor}</p>
           <a href={profile.github} target="_blank" rel="noreferrer" className="mt-8 inline-flex items-center gap-2 border-b border-coral pb-1 text-sm font-bold text-ink transition hover:text-coral">
             Browse my GitHub <ArrowUpRight size={16} />
@@ -19,6 +18,7 @@ export default function About() {
           <div className="space-y-6 text-lg leading-8 text-ink/75">
             {profile.about.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
           </div>
+
           <div className="mt-12 grid gap-6 border-t border-ink/15 pt-7 sm:grid-cols-2">
             <div>
               <p className="section-kicker">Education</p>
@@ -32,10 +32,17 @@ export default function About() {
                 ))}
               </div>
             </div>
-            <div className="relative flex min-h-48 flex-col justify-between overflow-hidden bg-acid p-6 text-ink">
-              <span className="font-mono text-xs font-bold">NOTE TO SELF / 001</span>
-              <p className="max-w-xs font-serif text-3xl italic leading-tight">Make it work. Make it clear. Then make it better.</p>
-              <span className="self-end text-3xl font-black">↗</span>
+
+            <div className="relative flex min-h-64 flex-col justify-between overflow-hidden bg-[#0d1521] p-6 text-paper shadow-[8px_8px_0_#d2f66f] transition duration-300 hover:-translate-y-1 hover:shadow-[10px_12px_0_#fa684a]">
+              <div aria-hidden="true" className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full border border-acid/20" />
+              <div className="relative">
+                <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-acid">Coding philosophy / 001</span>
+                <p className="mt-6 font-serif text-2xl italic leading-tight text-paper sm:text-3xl">“{profile.philosophy}”</p>
+              </div>
+              <div className="relative mt-8 border-t border-white/15 pt-4">
+                <span className="font-mono text-[9px] font-bold uppercase tracking-[0.2em] text-coral">Personal reminder</span>
+                <p className="mt-2 text-sm font-semibold leading-6 text-paper/75">{profile.tagline}</p>
+              </div>
             </div>
           </div>
         </div>

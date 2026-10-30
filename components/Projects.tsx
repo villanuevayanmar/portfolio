@@ -29,8 +29,8 @@ export default function Projects() {
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between">
           <SectionHeading
             eyebrow="02 / Project archive"
-            title="Things I've put into motion."
-            description="A collection of useful little systems, experiments, and applications built to solve everyday problems."
+            title="Experiments with a purpose."
+            description="From farm recordkeeping to everyday utility tools, these projects start with practical needs and grow through curiosity, testing, and iteration."
           />
           <div className="flex flex-wrap gap-2 pb-1" aria-label="Filter projects">
             {filters.map((item) => {
@@ -57,8 +57,8 @@ export default function Projects() {
                   {project.featured
                     ? <span className="mb-2 border border-current/40 px-2 py-1 text-[9px] font-bold uppercase tracking-[0.15em]">Featured</span>
                     : <span className="mb-2 font-mono text-xs opacity-60">#{number}</span>}
-                  <span aria-hidden="true" className="absolute -right-3 -top-12 h-36 w-36 rounded-full border border-current/20" />
-                  <span aria-hidden="true" className="absolute right-10 -top-5 h-24 w-24 rounded-full border border-current/20" />
+                  <span aria-hidden="true" className="absolute -right-3 -top-12 h-36 w-36 rounded-full border border-current/20 transition duration-500 group-hover:scale-125" />
+                  <span aria-hidden="true" className="absolute right-10 -top-5 h-24 w-24 rounded-full border border-current/20 transition duration-500 group-hover:-translate-x-2 group-hover:translate-y-2" />
                 </div>
 
                 <div className="flex flex-1 flex-col px-4 pb-4 pt-5 sm:px-5">

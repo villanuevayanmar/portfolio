@@ -32,4 +32,12 @@
   .section-kicker {
     @apply font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-coral;
   }
+
+  .cyber-grid {
+    background-image:
+      linear-gradient(rgba(210, 246, 111, 0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(210, 246, 111, 0.045) 1px, transparent 1px),
+      radial-gradient(circle at 82% 22%, rgba(250, 104, 74, 0.12), transparent 28rem);
+    background-size: 44px 44px, 44px 44px, auto;
+  }
 }

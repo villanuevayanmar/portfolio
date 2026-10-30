@@ -1,18 +1,20 @@
 export const profile = {
   name: "Yanmar Villanueva",
-  role: "IT Student • Developer",
+  role: "IT Student • Experimental Vibe Coder",
   location: "Philippines",
   email: "villanuevayanmar@gmail.com",
   github: "https://github.com/villanuevayanmar",
-  status: "Always learning. Always building.",
+  status: "Curious by default. Building through experiments.",
   summary:
-    "I like turning everyday problems into useful digital tools. I build web apps, trackers, and small experiments while learning how to make software clearer, faster, and easier to use.",
+    "I turn real-world concepts into practical software with AI tools, rapid prompting, and hands-on iteration. I enjoy testing new ideas, solving everyday problems, and shipping tools people can actually use.",
   about: [
-    "I'm interested in technology, problem solving, and the process of turning an idea into something people can actually use. I enjoy building practical tools, exploring new technologies, and improving the small details that make an application feel complete.",
-    "My projects range from personal finance and utility tools to a farm recordkeeping app and a match tracker. Each project gives me a chance to learn something new, work through problems, and make the next version better.",
+    "I'm a curious and experimental IT student who sees software development as a creative playground. I use AI tools and rapid prompting to explore ideas quickly, then test, debug, and refine the results until they become useful working software.",
+    "I like building around real needs, not just making demos. Pig Ledger is one example: I built it to address an actual farm recordkeeping problem. Every project gives me a new reason to explore, learn something, and turn another idea into a practical tool.",
   ],
+  philosophy: "To me, coding is so beautiful that I can't stop admiring it.",
+  tagline: "Everything in the world can be a life lesson.",
   lookingFor:
-    "A little about what I enjoy, what I build, and the ideas I'm exploring through code.",
+    "Open to part-time opportunities, freelance collaborations, and interesting ideas worth building.",
 };
 
 export type Project = {
@@ -31,7 +33,7 @@ export const projects: Project[] = [
   {
     title: "Pig Ledger",
     description:
-      "A mobile-friendly farm recordkeeping app for managing batches, feed use, expenses, sales, and cycle profitability in one place.",
+      "A mobile-friendly farm recordkeeping app for managing batches, feed use, expenses, sales, and cycle profitability in one place. Built to solve a real farm workflow problem.",
     tags: ["Next.js", "TypeScript", "Supabase", "PostgreSQL", "PWA"],
     category: "Web",
     liveUrl: "https://pig-ledger-pi.vercel.app/",
@@ -92,6 +94,7 @@ export const skillGroups: SkillGroup[] = [
   { group: "Web development", items: ["HTML", "CSS", "React", "Next.js", "Tailwind CSS"] },
   { group: "Tools", items: ["VS Code", "Vite", "Git", "GitHub"] },
   { group: "Data & storage", items: ["Supabase", "PostgreSQL", "Browser storage"] },
+  { group: "Vibe-coding workflow", items: ["AI-assisted prototyping", "Prompting", "Experimentation", "Debugging", "Iteration"] },
 ];
 
 export const education = [
