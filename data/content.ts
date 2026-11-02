@@ -43,6 +43,17 @@ export const projects: Project[] = [
     tone: "coral",
   },
   {
+    title: "Lakbay",
+    description:
+      "A Philippines-focused commuter guide designed to help people explore places and plan public-transport trips. It offers place suggestions and fallback travel guidance while clearly treating unverified jeepney and bus routes as suggestions, not confirmed routes.",
+    tags: ["Web App", "Commuter Guide", "Trip Planning", "Philippines"],
+    category: "Web",
+    liveUrl: "https://lakbay-cebu.vercel.app/",
+    repoUrl: "https://github.com/villanuevayanmar/lakbay",
+    mark: "LK",
+    tone: "blue",
+  },
+  {
     title: "Kuryente",
     description:
       "An electricity bill calculator that estimates usage and cost from meter readings, keeps a reading history, and saves data on the device.",
