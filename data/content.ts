@@ -45,13 +45,23 @@ export const projects: Project[] = [
   {
     title: "Sakay",
     description:
-      "A Philippines-focused commuter guide designed to help people explore places and plan public-transport trips. It offers place suggestions and fallback travel guidance while clearly treating unverified jeepney and bus routes as suggestions, not confirmed routes.",
-    tags: ["Web App", "Commuter Guide", "Trip Planning", "Philippines"],
+      "A mobile-first commute website focused exclusively on San Fernando, Cebu. It brings local destinations, map-based place discovery, and practical travel guidance together, including alternatives for places beyond common jeepney and bus coverage.",
+    tags: ["San Fernando, Cebu", "Commute Guide", "Interactive Map", "Mobile-first Web"],
     category: "Web",
     liveUrl: "https://sakay-commute.vercel.app/",
-    repoUrl: "https://github.com/villanuevayanmar/sakay",
     mark: "SK",
     tone: "blue",
+  },
+  {
+    title: "AniYan",
+    description:
+      "A mobile-friendly anime discovery website for finding what to watch. Explore searchable anime catalogs, ratings, trailers, episode guides, and streaming-service discovery for the Philippines, all in a clean dark interface without accounts or watch-history tracking.",
+    tags: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Anime Discovery"],
+    category: "Web",
+    liveUrl: "https://aniyan.vercel.app/",
+    repoUrl: "https://github.com/villanuevayanmar/AniYan",
+    mark: "AY",
+    tone: "violet",
   },
   {
     title: "Kuryente",
