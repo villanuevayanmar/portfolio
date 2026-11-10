@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
+import ExperienceSidebar from "@/components/ExperienceSidebar";
 import { SceneProvider } from "@/components/SceneContext";
 import "./globals.css";
 
@@ -10,10 +9,10 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-serif"
 
 export const metadata: Metadata = {
   title: {
-    default: "Yanmar Villanueva — Portfolio",
-    template: "%s — Yanmar Villanueva",
+    default: "Yanmar Villanueva | Portfolio",
+    template: "%s | Yanmar Villanueva",
   },
-  description: "A collection of projects, experiments, and practical digital tools by Yanmar Villanueva.",
+  description: "An interactive 3D portfolio by Yanmar Villanueva, featuring practical software projects and experiments.",
   icons: {
     icon: [{ url: "/favicon.svg?v=2", type: "image/svg+xml" }],
     shortcut: ["/favicon.svg?v=2"],
@@ -21,8 +20,8 @@ export const metadata: Metadata = {
   },
   keywords: ["Yanmar Villanueva", "Portfolio", "Web development", "Software projects", "Philippines"],
   openGraph: {
-    title: "Yanmar Villanueva — Portfolio",
-    description: "A collection of projects, experiments, and practical digital tools.",
+    title: "Yanmar Villanueva | Portfolio",
+    description: "An interactive 3D portfolio featuring practical software projects and experiments.",
     type: "website",
   },
 };
@@ -32,9 +31,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className={inter.variable + " " + playfair.variable + " font-sans"}>
         <SceneProvider>
-          <Navbar />
+          <ExperienceSidebar />
           <main>{children}</main>
-          <Footer />
         </SceneProvider>
       </body>
     </html>
