@@ -183,3 +183,133 @@
   .terminal-step { opacity: 1; transform: none; }
   *, *::before, *::after { transition-duration: 0.01ms !important; }
 }
+
+
+/* Full-screen interactive 3D portfolio experience */
+.experience-shell {
+  min-height: 100svh;
+  isolation: isolate;
+  perspective: 1200px;
+}
+
+.experience-grid {
+  background-image:
+    linear-gradient(rgba(210, 246, 111, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(210, 246, 111, 0.035) 1px, transparent 1px);
+  background-size: 46px 46px;
+  mask-image: linear-gradient(to bottom, black 45%, transparent 100%);
+}
+
+.scene-glass {
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(145deg, rgba(21, 34, 52, 0.92), rgba(9, 16, 27, 0.88));
+  box-shadow:
+    0 26px 90px rgba(0, 0, 0, 0.38),
+    inset 0 1px 0 rgba(255, 255, 255, 0.055);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  transform-style: preserve-3d;
+}
+
+.scene-project-card {
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035);
+  transition: border-color 180ms ease, background 180ms ease, transform 180ms ease;
+}
+
+.scene-project-card:hover {
+  transform: translateY(-3px) rotateX(2deg);
+  border-color: rgba(210, 246, 111, 0.35);
+  background: rgba(17, 29, 44, 0.96);
+}
+
+.scene-button-primary,
+.scene-button-secondary {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border-radius: 9px;
+  padding: 9px 14px;
+  font-size: 11px;
+  font-weight: 800;
+  transition: transform 180ms ease, background 180ms ease, border-color 180ms ease, color 180ms ease;
+}
+
+.scene-button-primary {
+  background: #d2f66f;
+  color: #101711;
+}
+
+.scene-button-primary:hover {
+  transform: translateY(-2px);
+  background: #ffffff;
+}
+
+.scene-button-secondary {
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.scene-button-secondary:hover {
+  transform: translateY(-2px);
+  border-color: rgba(250, 104, 74, 0.7);
+  color: #ff9b87;
+}
+
+.scene-input {
+  display: block;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  background: rgba(3, 9, 17, 0.55);
+  padding: 10px 11px;
+  color: #f4f1e9;
+  font: inherit;
+  font-size: 11px;
+  outline: none;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.scene-input::placeholder {
+  color: rgba(244, 241, 233, 0.34);
+}
+
+.scene-input:focus {
+  border-color: rgba(210, 246, 111, 0.65);
+  background: rgba(3, 9, 17, 0.8);
+}
+
+@media (max-width: 767px) {
+  .scene-glass {
+    max-height: 43svh;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(210, 246, 111, 0.28) transparent;
+  }
+
+  .scene-project-card {
+    min-height: 118px;
+  }
+}
+
+@media (max-height: 680px) and (min-width: 768px) {
+  .scene-glass {
+    max-height: 68svh;
+    overflow-y: auto;
+  }
+
+  .experience-shell {
+    min-height: 680px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene-project-card,
+  .scene-button-primary,
+  .scene-button-secondary {
+    transition: none;
+  }
+}

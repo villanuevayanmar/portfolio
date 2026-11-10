@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { SceneProvider } from "@/components/SceneContext";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans", display: "swap" });
@@ -30,9 +31,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.variable + " " + playfair.variable + " font-sans"}>
-        <Navbar />
-        <main>{children}</main>
-        <Footer />
+        <SceneProvider>
+          <Navbar />
+          <main>{children}</main>
+          <Footer />
+        </SceneProvider>
       </body>
     </html>
   );
