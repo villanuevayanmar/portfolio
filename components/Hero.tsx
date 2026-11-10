@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ArrowDownRight, ArrowUpRight, Github, Mail, Terminal } from "lucide-react";
 import { profile, projects } from "@/data/content";
+import ThreeHeroScene from "@/components/ThreeHeroLoader";
 
 const details = [
   { label: "BUILD FOCUS", value: "AI-assisted web apps" },
@@ -74,12 +75,11 @@ export default function Hero() {
           </div>
         </div>
 
-        <aside aria-label="A visual of my build workflow" className="hero-terminal-wrap hero-intro-delay relative mx-auto w-full max-w-xl lg:ml-auto">
+        <aside aria-label="Three-dimensional creative lab visual" className="hero-terminal-wrap hero-intro-delay relative mx-auto w-full max-w-xl lg:ml-auto">
           <div aria-hidden="true" className="terminal-orbit absolute left-1/2 top-1/2 h-[112%] aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full border border-acid/[0.08]" />
           <div aria-hidden="true" className="terminal-orbit terminal-orbit-reverse absolute left-1/2 top-1/2 h-[94%] aspect-square -translate-x-1/2 -translate-y-1/2 rounded-full border border-coral/[0.08]" />
           <div aria-hidden="true" className="absolute -inset-3 rounded-2xl bg-gradient-to-br from-acid/15 via-transparent to-coral/15 blur-xl" />
-          <div className="terminal-panel group relative overflow-hidden rounded-xl border border-white/15 bg-[#0d1521]/95 shadow-[0_24px_90px_rgba(0,0,0,0.45)] transition duration-500 hover:-translate-y-1 hover:border-acid/30 hover:shadow-[0_28px_100px_rgba(0,0,0,0.6)]">
-            <span aria-hidden="true" className="terminal-scan" />
+          <div className="relative overflow-hidden rounded-xl border border-white/15 bg-[#0d1521]/95 shadow-[0_24px_90px_rgba(0,0,0,0.45)]">
             <div className="relative z-10 flex items-center justify-between border-b border-white/10 bg-white/[0.035] px-4 py-3">
               <div className="flex items-center gap-2">
                 <span className="h-2.5 w-2.5 rounded-full bg-coral" />
@@ -89,29 +89,23 @@ export default function Hero() {
               </div>
               <span className="inline-flex items-center gap-2 font-mono text-[10px] text-acid">
                 <span className="terminal-live-dot h-1.5 w-1.5 rounded-full bg-acid" />
-                <Terminal size={13} /> WORKFLOW.LOG
+                <Terminal size={13} /> THREE.JS / WEBGL
               </span>
             </div>
-
-            <div className="relative z-10 space-y-5 p-5 font-mono text-xs leading-6 sm:p-7 sm:text-sm">
-              <div className="terminal-step terminal-step-one">
-                <p className="text-paper/40"># start with something real</p>
-                <p className="text-paper"><span className="mr-2 text-acid">$</span>define_problem(<span className="text-coral">"everyday need"</span>)</p>
-                <p className="pl-5 text-paper/55">↳ Pig Ledger · farm recordkeeping</p>
+            <div className="relative h-[310px] overflow-hidden sm:h-[360px]">
+              <div aria-hidden="true" className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_50%_48%,rgba(128,105,255,0.15),transparent_48%)]" />
+              <ThreeHeroScene />
+              <div className="pointer-events-none absolute left-5 top-5 z-10">
+                <p className="font-mono text-[9px] uppercase tracking-[0.2em] text-acid/70">Interactive study / 001</p>
+                <p className="mt-1 text-sm font-black tracking-tight text-paper sm:text-base">Ideas in motion.</p>
               </div>
-              <div className="terminal-step terminal-step-two">
-                <p className="text-paper/40"># explore, build, and improve</p>
-                <p className="text-paper"><span className="mr-2 text-acid">$</span>prototype(<span className="text-coral">"with AI + curiosity"</span>)</p>
-                <p className="pl-5 text-paper/55">↳ prompt · test · debug · refine</p>
+              <div className="pointer-events-none absolute bottom-5 left-5 z-10 flex items-center gap-2 font-mono text-[9px] uppercase tracking-[0.16em] text-paper/45">
+                <span className="h-1.5 w-1.5 rounded-full bg-coral shadow-[0_0_10px_rgba(250,104,74,0.7)]" />
+                ROTATE / EXPLORE / CREATE
               </div>
-              <div className="terminal-step terminal-step-three">
-                <p className="text-paper/40"># make the idea useful</p>
-                <p className="text-paper"><span className="mr-2 text-acid">$</span>ship(<span className="text-coral">"working software"</span>)</p>
-                <p className="pl-5 text-acid">↳ deployed · still learning <span className="animate-pulse">▍</span></p>
-              </div>
+              <span aria-hidden="true" className="pointer-events-none absolute bottom-4 right-5 z-10 font-mono text-[9px] text-paper/30">WEBGL · 3D CORE</span>
             </div>
-
-            <a href="#projects" className="relative z-10 group flex items-center justify-between border-t border-white/10 bg-white/[0.025] px-5 py-4 transition hover:bg-white/[0.06] sm:px-7">
+            <a href="#projects" className="group relative z-10 flex items-center justify-between border-t border-white/10 bg-white/[0.025] px-5 py-4 transition hover:bg-white/[0.06] sm:px-7">
               <span>
                 <span className="block font-mono text-[9px] uppercase tracking-[0.2em] text-paper/40">Real-world build / featured</span>
                 <span className="mt-1 block text-sm font-bold text-paper">Pig Ledger</span>
