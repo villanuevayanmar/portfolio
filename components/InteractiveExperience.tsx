@@ -152,7 +152,7 @@ export default function InteractiveExperience() {
         <RobotModel view={scene} />
         <ContactShadows position={[0, -2.35, 0]} scale={9} blur={2.8} far={4.5} opacity={0.42} color="#03070c" />
         <EffectComposer multisampling={0}>
-          <Bloom luminanceThreshold={1.05} luminanceSmoothing={0.18} intensity={1.15} mipmapBlur />
+          <Bloom luminanceThreshold={1.28} luminanceSmoothing={0.16} intensity={0.62} mipmapBlur />
         </EffectComposer>
       </Suspense>
     </Canvas>
