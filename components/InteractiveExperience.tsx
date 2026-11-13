@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
-import { ContactShadows } from "@react-three/drei";
+import { ContactShadows, Environment, Lightformer, Html } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowDownRight, ArrowUpRight, Github, Mail, ExternalLink, Sparkles, BriefcaseBusiness } from "lucide-react";
@@ -10,10 +10,10 @@ import * as THREE from "three";
 import { profile, projects, skillGroups, education } from "@/data/content";
 import { useScene, type SceneView } from "@/components/SceneContext";
 import CyberEnvironment from "@/components/CyberEnvironment";
-import RobotModel from "@/components/RobotModel";
+import CharacterModel from "@/components/CharacterModel";
 
 const greetings = [
-  { kicker: "SYSTEM ONLINE", title: "Welcome, visitor.", body: "I'm Yanmar's digital companion. Take a look around this little world." },
+  { kicker: "SYSTEM ONLINE", title: "Welcome, visitor.", body: "This is Yanmar's portfolio. Take a look around and explore what he has built." },
   { kicker: "DISCOVER MORE", title: "Curious what I've built?", body: "Choose Projects on the left and I'll bring the work into view." },
   { kicker: "LET'S CONNECT", title: "Have something in mind?", body: "Questions, collaborations, or opportunities? I can help you reach Yanmar." },
 ];
@@ -147,9 +147,15 @@ export default function InteractiveExperience() {
       onError={() => setWebglFailed(true)}
       fallback={<div className="absolute inset-0 grid place-items-center bg-[#080e18] text-xs text-white/50">3D preview is unavailable in this browser.</div>}
     >
-      <Suspense fallback={null}>
+      <Suspense fallback={<Html center><div className="rounded-full border border-[#ffd700]/20 bg-[#080e18]/90 px-4 py-2 font-mono text-[10px] tracking-[.14em] text-[#ffd700] shadow-2xl backdrop-blur-xl">LOADING CHARACTER...</div></Html>}>
         <CyberEnvironment />
-        <RobotModel view={scene} />
+        <Environment resolution={256}>
+          <Lightformer form="rect" intensity={3.2} position={[0, 5, -4]} scale={[9, 5, 1]} />
+          <Lightformer form="rect" intensity={2.4} position={[-5, 1, 2]} rotation={[0, Math.PI / 2, 0]} scale={[3, 5, 1]} />
+          <Lightformer form="rect" intensity={3.1} position={[5, 2, 3]} rotation={[0, -Math.PI / 3, 0]} scale={[3, 5, 1]} />
+          <Lightformer form="rect" intensity={1.6} position={[0, -2, 2]} rotation={[Math.PI / 2, 0, 0]} scale={[7, 3, 1]} />
+        </Environment>
+        <CharacterModel view={scene} />
         <ContactShadows position={[0, -2.35, 0]} scale={9} blur={2.8} far={4.5} opacity={0.42} color="#03070c" />
         <EffectComposer multisampling={0}>
           <Bloom luminanceThreshold={1.28} luminanceSmoothing={0.16} intensity={0.62} mipmapBlur />

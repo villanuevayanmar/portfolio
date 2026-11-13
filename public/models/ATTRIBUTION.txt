@@ -1,0 +1,13 @@
+Male Adult 20 — rigged 3D character model
+Source: https://models.codelove.in/models/male-adult-20.glb
+Model page: https://models.codelove.in/models/male-adult-20/
+License: MIT (see LICENSE-MIT.txt; license is embedded in the original GLB).
+
+Animation clips for the same Biped skeleton:
+- Idle: m_idle_neutral_01
+- Wave: m_wave_01
+- Talk: m_gestic_talk_neutral_01
+- Thoughtful: m_gestic_thoughtful_01
+- Clap: m_claphands_01
+Source: https://models.codelove.in/animations/
+The model and animation clips are redistributed with the MIT license notice.
