@@ -1,6 +1,6 @@
 "use client";
 
-import { useGLTF } from "@react-three/drei";
+import { useGLTF, useTexture } from "@react-three/drei";
 import { useFrame, useThree } from "@react-three/fiber";
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
@@ -50,6 +50,92 @@ const SCENE_POSES: Record<SceneView, Pose> = {
   },
 };
 
+function roundedFramePath(width: number, height: number, radius: number) {
+  const shape = new THREE.Shape();
+  const x = width / 2;
+  const y = height / 2;
+  shape.moveTo(-x + radius, -y);
+  shape.lineTo(x - radius, -y);
+  shape.quadraticCurveTo(x, -y, x, -y + radius);
+  shape.lineTo(x, y - radius);
+  shape.quadraticCurveTo(x, y, x - radius, y);
+  shape.lineTo(-x + radius, y);
+  shape.quadraticCurveTo(-x, y, -x, y - radius);
+  shape.lineTo(-x, -y + radius);
+  shape.quadraticCurveTo(-x, -y, -x + radius, -y);
+  return shape;
+}
+
+function createGlasses() {
+  const group = new THREE.Group();
+  group.name = "YanmarBlackRectangularGlasses";
+  group.position.set(0.116, 0.0699, 0);
+  group.quaternion.set(0, Math.SQRT1_2, 0, Math.SQRT1_2);
+
+  const frameMaterial = new THREE.MeshPhysicalMaterial({
+    color: "#101319",
+    metalness: 0.28,
+    roughness: 0.24,
+    clearcoat: 0.85,
+    clearcoatRoughness: 0.16,
+  });
+  const lensMaterial = new THREE.MeshPhysicalMaterial({
+    color: "#8795b5",
+    metalness: 0.03,
+    roughness: 0.18,
+    transparent: true,
+    opacity: 0.17,
+    clearcoat: 1,
+    clearcoatRoughness: 0.08,
+    depthWrite: false,
+    side: THREE.DoubleSide,
+  });
+  const frameGeometry = new THREE.ExtrudeGeometry(
+    (() => {
+      const outer = roundedFramePath(0.064, 0.046, 0.011);
+      const inner = roundedFramePath(0.052, 0.034, 0.008);
+      outer.holes.push(new THREE.Path(inner.getPoints(32).reverse()));
+      return outer;
+    })(),
+    { depth: 0.004, bevelEnabled: true, bevelSegments: 2, bevelSize: 0.001, bevelThickness: 0.001, curveSegments: 10 },
+  );
+  const lensGeometry = new THREE.PlaneGeometry(0.052, 0.034);
+
+  for (const center of [-0.034, 0.034]) {
+    const frame = new THREE.Mesh(frameGeometry, frameMaterial);
+    frame.position.set(center, 0, 0);
+    frame.castShadow = false;
+    group.add(frame);
+
+    const lens = new THREE.Mesh(lensGeometry, lensMaterial);
+    lens.position.set(center, 0, 0.0015);
+    group.add(lens);
+
+    const hinge = new THREE.Mesh(
+      new THREE.BoxGeometry(0.008, 0.006, 0.009),
+      frameMaterial,
+    );
+    hinge.position.set(center + Math.sign(center) * 0.034, 0, 0.001);
+    group.add(hinge);
+
+    const temple = new THREE.Mesh(
+      new THREE.BoxGeometry(0.006, 0.007, 0.13),
+      frameMaterial,
+    );
+    temple.position.set(center + Math.sign(center) * 0.063, 0, -0.066);
+    group.add(temple);
+  }
+
+  const bridge = new THREE.Mesh(
+    new THREE.BoxGeometry(0.024, 0.006, 0.005),
+    frameMaterial,
+  );
+  bridge.position.set(0, 0.001, 0.002);
+  group.add(bridge);
+
+  return group;
+}
+
 function crossfade(
   next: THREE.AnimationAction,
   previous: THREE.AnimationAction | null,
@@ -75,6 +161,17 @@ function crossfade(
 export default function CharacterModel({ view }: { view: SceneView }) {
   const [modelGLTF, idleGLTF, waveGLTF, talkGLTF, thoughtfulGLTF, clapGLTF] =
     useGLTF([...ASSETS], false, true);
+
+  const [bodyMap, headMap] = useTexture([
+    "/models/yanmar-black-hoodie.webp",
+    "/models/yanmar-face-hair.webp",
+  ]);
+  bodyMap.flipY = false;
+  headMap.flipY = false;
+  bodyMap.colorSpace = THREE.SRGBColorSpace;
+  headMap.colorSpace = THREE.SRGBColorSpace;
+  bodyMap.needsUpdate = true;
+  headMap.needsUpdate = true;
 
   const { gl, viewport } = useThree();
 
@@ -111,7 +208,17 @@ export default function CharacterModel({ view }: { view: SceneView }) {
 
         material = source.clone();
         if (material instanceof THREE.MeshStandardMaterial) {
-          material.envMapIntensity = material.name.toLowerCase().includes("head") ? 1.25 : 0.8;
+          const materialName = material.name.toLowerCase();
+          if (materialName.includes("body")) {
+            material.map = bodyMap;
+            material.roughness = 0.86;
+          }
+          if (materialName.includes("head")) {
+            material.map = headMap;
+            material.roughness = 0.72;
+          }
+          material.needsUpdate = true;
+          material.envMapIntensity = materialName.includes("head") ? 1.25 : 0.8;
           material.roughness = material.name.toLowerCase().includes("head")
             ? Math.min(material.roughness, 0.58)
             : material.roughness;
@@ -136,8 +243,11 @@ export default function CharacterModel({ view }: { view: SceneView }) {
         : copyMaterial(object.material);
     });
 
+    const head = clone.getObjectByName("Bip01 Head");
+    if (head) head.add(createGlasses());
+
     return clone;
-  }, [gl, modelGLTF.scene]);
+  }, [bodyMap, gl, headMap, modelGLTF.scene]);
 
   const mixer = useMemo(() => new THREE.AnimationMixer(character), [character]);
 
@@ -277,7 +387,7 @@ export default function CharacterModel({ view }: { view: SceneView }) {
 
     characterTarget.y += Math.sin(elapsed * 1.05) * 0.018;
     root.current.position.lerp(characterTarget, 1 - Math.exp(-dt * 3));
-    root.current.scale.setScalar(mobile ? 1.3 : 1.8);
+    root.current.scale.setScalar(mobile ? 1.16 : 1.35);
 
     const turn = view === "projects" ? -0.1 : view === "about" ? 0.08 : 0.025;
     root.current.rotation.y = THREE.MathUtils.damp(

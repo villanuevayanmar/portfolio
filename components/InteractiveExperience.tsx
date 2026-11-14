@@ -62,24 +62,79 @@ function HomePanel({ onSelect }: { onSelect: (view: SceneView) => void }) {
 }
 
 function AboutPanel() {
-  return <motion.div key="about" initial={{ opacity: 0, x: 55, rotateY: -7 }} animate={{ opacity: 1, x: 0, rotateY: 0 }} exit={{ opacity: 0, x: 35 }} transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }} className="scene-card w-full max-w-[560px]">
-    <PanelHeading index="01" kicker="ABOUT THE BUILDER" title="Curiosity is where the code begins." detail={profile.summary} />
-    <div className="space-y-3 text-xs leading-6 text-white/65 sm:text-sm">
-      {profile.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-    </div>
-    <div className="mt-5 grid grid-cols-2 gap-2">
-      <div className="rounded-xl border border-white/10 bg-white/[.035] p-3"><p className="font-mono text-[8px] uppercase tracking-[.16em] text-white/35">Focus</p><p className="mt-1 text-xs font-bold text-white">Practical software</p></div>
-      <div className="rounded-xl border border-white/10 bg-white/[.035] p-3"><p className="font-mono text-[8px] uppercase tracking-[.16em] text-white/35">Approach</p><p className="mt-1 text-xs font-bold text-white">AI + experimentation</p></div>
-    </div>
-    <div className="mt-5">
-      <p className="mb-3 flex items-center gap-2 font-mono text-[9px] font-bold uppercase tracking-[.17em] text-[#ffd700]"><Sparkles size={13} /> Skills in my toolkit</p>
-      <div className="flex flex-wrap gap-2">{skillGroups.flatMap((group) => group.items).map((skill) => <span key={skill} className="rounded-full border border-white/10 bg-white/[.04] px-3 py-1.5 text-[10px] text-white/65">{skill}</span>)}</div>
-    </div>
-    <div className="mt-5 border-t border-white/10 pt-4">
-      <p className="font-serif text-sm italic text-[#ffd700]/80">“{profile.philosophy}”</p>
-      <p className="mt-2 text-[10px] text-white/35">{education[0].school} · {education[0].detail}</p>
-    </div>
-  </motion.div>;
+  const [portraitOpen, setPortraitOpen] = useState(false);
+
+  return <>
+    <motion.div key="about" initial={{ opacity: 0, x: 55, rotateY: -7 }} animate={{ opacity: 1, x: 0, rotateY: 0 }} exit={{ opacity: 0, x: 35 }} transition={{ duration: 0.55, ease: [0.2, 0.8, 0.2, 1] }} className="scene-card w-full max-w-[560px]">
+      <div className="mb-5 flex items-start gap-4">
+        <button
+          type="button"
+          onClick={() => setPortraitOpen(true)}
+          aria-label="View Yanmar's portrait"
+          className="group relative h-[112px] w-[88px] shrink-0 overflow-hidden rounded-xl border border-white/15 bg-white/5 shadow-lg"
+        >
+          <img
+            src="/images/yian.jpg"
+            alt="Yanmar Villanueva"
+            className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105"
+          />
+          <span className="absolute inset-x-0 bottom-0 bg-black/65 px-2 py-1.5 font-mono text-[8px] tracking-[.13em] text-white/80">VIEW PHOTO</span>
+        </button>
+        <div className="min-w-0 flex-1">
+          <PanelHeading index="01" kicker="ABOUT THE BUILDER" title="Curiosity is where the code begins." detail={profile.summary} />
+          <p className="font-mono text-[9px] uppercase tracking-[.14em] text-[#ffd700]/70">{profile.role}</p>
+        </div>
+      </div>
+      <div className="space-y-3 text-xs leading-6 text-white/65 sm:text-sm">
+        {profile.about.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+      </div>
+      <div className="mt-5 grid grid-cols-2 gap-2">
+        <div className="rounded-xl border border-white/10 bg-white/[.035] p-3"><p className="font-mono text-[8px] uppercase tracking-[.16em] text-white/35">Focus</p><p className="mt-1 text-xs font-bold text-white">Practical software</p></div>
+        <div className="rounded-xl border border-white/10 bg-white/[.035] p-3"><p className="font-mono text-[8px] uppercase tracking-[.16em] text-white/35">Approach</p><p className="mt-1 text-xs font-bold text-white">AI + experimentation</p></div>
+      </div>
+      <div className="mt-5">
+        <p className="mb-3 flex items-center gap-2 font-mono text-[9px] font-bold uppercase tracking-[.17em] text-[#ffd700]"><Sparkles size={13} /> Skills in my toolkit</p>
+        <div className="flex flex-wrap gap-2">{skillGroups.flatMap((group) => group.items).map((skill) => <span key={skill} className="rounded-full border border-white/10 bg-white/[.04] px-3 py-1.5 text-[10px] text-white/65">{skill}</span>)}</div>
+      </div>
+      <div className="mt-5 border-t border-white/10 pt-4">
+        <p className="font-serif text-sm italic text-[#ffd700]/80">“{profile.philosophy}”</p>
+        <p className="mt-2 text-[10px] text-white/35">{education[0].school} · {education[0].detail}</p>
+      </div>
+    </motion.div>
+
+    <AnimatePresence>
+      {portraitOpen && (
+        <motion.div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Yanmar's portrait"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={() => setPortraitOpen(false)}
+          className="fixed inset-0 z-[90] flex items-center justify-center bg-black/85 p-6 backdrop-blur-xl"
+        >
+          <button
+            type="button"
+            onClick={() => setPortraitOpen(false)}
+            aria-label="Close portrait"
+            className="absolute right-6 top-6 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs font-semibold text-white hover:bg-white/20"
+          >
+            Close
+          </button>
+          <motion.img
+            src="/images/yian.jpg"
+            alt="Yanmar Villanueva"
+            initial={{ opacity: 0, scale: 0.94, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.96 }}
+            onClick={(event) => event.stopPropagation()}
+            className="max-h-[82vh] max-w-[min(88vw,620px)] rounded-2xl border border-white/15 object-contain shadow-2xl"
+          />
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </>;
 }
 
 function ProjectsPanel() {
@@ -133,7 +188,7 @@ function ContactPanel() {
 export default function InteractiveExperience() {
   const { scene, setScene } = useScene();
   const [webglFailed, setWebglFailed] = useState(false);
-  const panel = scene === "home" ? <HomePanel onSelect={setScene} /> : scene === "about" ? <AboutPanel /> : scene === "projects" ? <ProjectsPanel /> : <ContactPanel />;
+  const panel = scene === "home" ? <HomePanel key="home" onSelect={setScene} /> : scene === "about" ? <AboutPanel key="about" /> : scene === "projects" ? <ProjectsPanel key="projects" /> : <ContactPanel key="contact" />;
 
   return <section id="home" className="experience-root fixed inset-0 overflow-hidden bg-[#080e18] text-white">
     <div aria-hidden="true" className="experience-atmosphere absolute inset-0" />
@@ -179,9 +234,7 @@ export default function InteractiveExperience() {
     <div className="experience-content pointer-events-none absolute right-5 top-1/2 z-30 flex w-[min(570px,calc(100vw-120px))] -translate-y-1/2 justify-end md:right-[5vw] md:w-[min(650px,48vw)]">
       <div className="pointer-events-auto w-full">
         <AnimatePresence mode="wait" initial={false}>
-          <div key={scene} className="w-full">
-            {panel}
-          </div>
+          {panel}
         </AnimatePresence>
       </div>
     </div>
