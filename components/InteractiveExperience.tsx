@@ -164,7 +164,7 @@ export default function InteractiveExperience() {
     </Canvas>
 
     <div className="experience-vignette pointer-events-none absolute inset-0" />
-    <div className="pointer-events-none absolute left-5 top-5 z-20 md:left-[116px] md:top-7">
+    <div className="pointer-events-none absolute left-[70px] top-5 z-20 md:left-[116px] md:top-7">
       <p className="font-mono text-[8px] font-semibold uppercase tracking-[.22em] text-[#ffd700]/65 sm:text-[9px]">YANMAR VILLANUEVA <span className="mx-1 text-white/20">/</span> DIGITAL EXPERIENCE</p>
       <p className="mt-2 hidden font-mono text-[8px] uppercase tracking-[.16em] text-white/25 md:block">IT Student · Experimental Vibe Coder</p>
     </div>
