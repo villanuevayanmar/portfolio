@@ -162,16 +162,20 @@ export default function CharacterModel({ view }: { view: SceneView }) {
   const [modelGLTF, idleGLTF, waveGLTF, talkGLTF, thoughtfulGLTF, clapGLTF] =
     useGLTF([...ASSETS], false, true);
 
-  const [bodyMap, headMap] = useTexture([
+  const [bodyMap, headMap, portraitMap] = useTexture([
     "/models/yanmar-black-hoodie.webp",
     "/models/yanmar-face-hair.webp",
+    "/models/yanmar-face-real.webp",
   ]);
   bodyMap.flipY = false;
   headMap.flipY = false;
+  portraitMap.flipY = true;
   bodyMap.colorSpace = THREE.SRGBColorSpace;
   headMap.colorSpace = THREE.SRGBColorSpace;
+  portraitMap.colorSpace = THREE.SRGBColorSpace;
   bodyMap.needsUpdate = true;
   headMap.needsUpdate = true;
+  portraitMap.needsUpdate = true;
 
   const { gl, viewport } = useThree();
 
@@ -198,6 +202,46 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     clone.traverse((object) => {
       if (!(object instanceof THREE.Mesh)) return;
 
+      if (object instanceof THREE.SkinnedMesh) {
+        // Widen only vertices driven by the pelvis, thigh, and calf bones.
+        object.geometry = object.geometry.clone();
+        const positions = object.geometry.getAttribute("position");
+        const skinIndices = object.geometry.getAttribute("skinIndex");
+        const skinWeights = object.geometry.getAttribute("skinWeight");
+        const legBones = new Set<number>();
+
+        object.skeleton.bones.forEach((bone, index) => {
+          if (/Bip01 (?:Pelvis|[LR] Thigh|[LR] Calf)/i.test(bone.name)) {
+            legBones.add(index);
+          }
+        });
+
+        if (positions && skinIndices && skinWeights && legBones.size) {
+          for (let i = 0; i < positions.count; i += 1) {
+            const z = positions.getZ(i);
+            if (z > -0.12) continue;
+
+            let legInfluence = 0;
+            for (let k = 0; k < 4; k += 1) {
+              if (legBones.has(skinIndices.getComponent(i, k))) {
+                legInfluence += skinWeights.getComponent(i, k);
+              }
+            }
+
+            if (legInfluence <= 0.05) continue;
+            const looseFit = THREE.MathUtils.smoothstep(-z, 0.13, 0.32);
+            const widthScale = 1 + 0.14 * looseFit * Math.min(1, legInfluence);
+            positions.setX(i, positions.getX(i) * widthScale);
+          }
+
+          object.geometry.userData.yanmarWidened = true;
+          positions.needsUpdate = true;
+          object.geometry.computeVertexNormals();
+          object.geometry.computeBoundingBox();
+          object.geometry.computeBoundingSphere();
+        }
+      }
+
       object.castShadow = true;
       object.receiveShadow = true;
       object.frustumCulled = !(object instanceof THREE.SkinnedMesh);
@@ -216,6 +260,53 @@ export default function CharacterModel({ view }: { view: SceneView }) {
           if (materialName.includes("head")) {
             material.map = headMap;
             material.roughness = 0.72;
+            material.onBeforeCompile = (shader) => {
+              shader.uniforms.yanmarFacePortrait = { value: portraitMap };
+              shader.vertexShader = shader.vertexShader
+                .replace(
+                  "#include <common>",
+                  "#include <common>\nvarying vec3 vYanmarHeadPosition;",
+                )
+                .replace(
+                  "#include <begin_vertex>",
+                  "#include <begin_vertex>\nvYanmarHeadPosition = position;",
+                );
+              shader.fragmentShader = shader.fragmentShader
+                .replace(
+                  "#include <common>",
+                  "#include <common>\nuniform sampler2D yanmarFacePortrait;\nvarying vec3 vYanmarHeadPosition;",
+                )
+                .replace(
+                  "#include <map_fragment>",
+                  `#include <map_fragment>
+                  vec2 yanmarFaceUv = vec2(
+                    (vYanmarHeadPosition.x + 0.1) / 0.2,
+                    (vYanmarHeadPosition.z - 0.65) / 0.35
+                  );
+                  float yanmarFaceBounds =
+                    step(0.0, yanmarFaceUv.x) *
+                    step(yanmarFaceUv.x, 1.0) *
+                    step(0.0, yanmarFaceUv.y) *
+                    step(yanmarFaceUv.y, 1.0);
+                  float yanmarFaceFront = smoothstep(
+                    0.01,
+                    0.04,
+                    -vYanmarHeadPosition.y
+                  );
+                  vec4 yanmarFaceSample = mapTexelToLinear(texture2D(
+                    yanmarFacePortrait,
+                    yanmarFaceUv
+                  ));
+                  float yanmarFaceBlend =
+                    yanmarFaceSample.a * yanmarFaceFront * yanmarFaceBounds;
+                  diffuseColor.rgb = mix(
+                    diffuseColor.rgb,
+                    yanmarFaceSample.rgb,
+                    yanmarFaceBlend
+                  );`,
+                );
+            };
+            material.customProgramCacheKey = () => "yanmar-real-face-projection-v1";
           }
           material.needsUpdate = true;
           material.envMapIntensity = materialName.includes("head") ? 1.25 : 0.8;
@@ -229,6 +320,7 @@ export default function CharacterModel({ view }: { view: SceneView }) {
             material.roughnessMap,
             material.metalnessMap,
             material.emissiveMap,
+            portraitMap,
           ]) {
             if (texture) texture.anisotropy = anisotropy;
           }
@@ -247,7 +339,7 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     if (head) head.add(createGlasses());
 
     return clone;
-  }, [bodyMap, gl, headMap, modelGLTF.scene]);
+  }, [bodyMap, gl, headMap, modelGLTF.scene, portraitMap]);
 
   const mixer = useMemo(() => new THREE.AnimationMixer(character), [character]);
 
@@ -255,6 +347,7 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     return () => {
       character.traverse((object) => {
         if (!(object instanceof THREE.Mesh)) return;
+        if (object.geometry.userData.yanmarWidened) object.geometry.dispose();
         const materials = Array.isArray(object.material) ? object.material : [object.material];
         materials.forEach((material) => material.dispose());
       });
@@ -361,8 +454,8 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     cameraPosition.set(...pose.camera);
     lookTarget.set(...pose.look);
     if (mobile) {
-      cameraPosition.set(0, 0.12, 10.25);
-      lookTarget.set(0, -0.1, 0);
+      cameraPosition.set(0, 0.12, 9.45);
+      lookTarget.set(0, -0.28, 0);
     }
 
     const cameraEase = 1 - Math.exp(-dt * 2.15);
@@ -372,7 +465,7 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     camera.quaternion.slerp(cameraHelper.quaternion, cameraEase);
 
     if (camera instanceof THREE.PerspectiveCamera) {
-      const targetFov = mobile ? 43 : pose.fov;
+      const targetFov = mobile ? 39 : Math.max(34, pose.fov - 1);
       const nextFov = THREE.MathUtils.damp(camera.fov, targetFov, 2.2, dt);
       if (Math.abs(nextFov - camera.fov) > 0.001) {
         camera.fov = nextFov;
@@ -387,7 +480,7 @@ export default function CharacterModel({ view }: { view: SceneView }) {
 
     characterTarget.y += Math.sin(elapsed * 1.05) * 0.018;
     root.current.position.lerp(characterTarget, 1 - Math.exp(-dt * 3));
-    root.current.scale.setScalar(mobile ? 1.16 : 1.35);
+    root.current.scale.setScalar(mobile ? 1.62 : 1.58);
 
     const turn = view === "projects" ? -0.1 : view === "about" ? 0.08 : 0.025;
     root.current.rotation.y = THREE.MathUtils.damp(
