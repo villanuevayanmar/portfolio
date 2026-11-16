@@ -293,7 +293,7 @@ export default function CharacterModel({ view }: { view: SceneView }) {
                     0.04,
                     -vYanmarHeadPosition.y
                   );
-                  vec4 yanmarFaceSample = mapTexelToLinear(texture2D(
+                  vec4 yanmarFaceSample = sRGBTransferEOTF(texture2D(
                     yanmarFacePortrait,
                     yanmarFaceUv
                   ));
