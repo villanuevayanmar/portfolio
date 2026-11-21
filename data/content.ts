@@ -24,6 +24,7 @@ export type Project = {
   category: "Web" | "Utility";
   liveUrl?: string;
   repoUrl?: string;
+  sourcePrivate?: boolean;
   featured?: boolean;
   mark: string;
   tone: "coral" | "blue" | "lime" | "violet" | "amber";
@@ -41,6 +42,17 @@ export const projects: Project[] = [
     featured: true,
     mark: "PL",
     tone: "coral",
+  },
+  {
+    title: "Snack O'Clock",
+    description:
+      "A local-first storefront proposal and demonstration for a seven-day food and beverage concept at CTU–Naga Campus. The cart and demo checkout persist in the browser; it does not process real payments or send real orders.",
+    tags: ["Next.js 16", "React 19", "TypeScript", "Tailwind CSS 4", "localStorage"],
+    category: "Web",
+    repoUrl: "https://github.com/villanuevayanmar/snack-oclock",
+    sourcePrivate: true,
+    mark: "SO",
+    tone: "amber",
   },
   {
     title: "Sakay",
