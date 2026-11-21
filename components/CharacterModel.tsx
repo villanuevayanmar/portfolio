@@ -28,112 +28,146 @@ const SCENE_POSES: Record<SceneView, Pose> = {
     camera: [0, 0.2, 9.2],
     look: [-0.08, -0.2, 0],
     character: [-3.15, -2.34, 0],
-    fov: 37,
+    fov: 33,
   },
   about: {
     camera: [-0.48, 0.34, 8.55],
     look: [-0.62, -0.05, 0.12],
     character: [-2.92, -2.34, 0.12],
-    fov: 39,
+    fov: 34,
   },
   projects: {
     camera: [0.42, 0.28, 8.55],
     look: [-0.26, -0.12, 0],
     character: [-3.2, -2.34, -0.12],
-    fov: 37,
+    fov: 33,
   },
   contact: {
     camera: [-0.36, 0.28, 8.7],
     look: [-0.56, -0.08, 0.12],
     character: [-3.02, -2.34, 0],
-    fov: 38,
+    fov: 33,
   },
 };
 
-function roundedFramePath(width: number, height: number, radius: number) {
+function roundedRectangle(width: number, height: number, radius: number) {
+  const x = -width / 2;
+  const y = -height / 2;
   const shape = new THREE.Shape();
-  const x = width / 2;
-  const y = height / 2;
-  shape.moveTo(-x + radius, -y);
-  shape.lineTo(x - radius, -y);
-  shape.quadraticCurveTo(x, -y, x, -y + radius);
-  shape.lineTo(x, y - radius);
-  shape.quadraticCurveTo(x, y, x - radius, y);
-  shape.lineTo(-x + radius, y);
-  shape.quadraticCurveTo(-x, y, -x, y - radius);
-  shape.lineTo(-x, -y + radius);
-  shape.quadraticCurveTo(-x, -y, -x + radius, -y);
+
+  shape.moveTo(x + radius, y);
+  shape.lineTo(x + width - radius, y);
+  shape.quadraticCurveTo(x + width, y, x + width, y + radius);
+  shape.lineTo(x + width, y + height - radius);
+  shape.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+  shape.lineTo(x + radius, y + height);
+  shape.quadraticCurveTo(x, y + height, x, y + height - radius);
+  shape.lineTo(x, y + radius);
+  shape.quadraticCurveTo(x, y, x + radius, y);
+
   return shape;
 }
 
-function createGlasses() {
+function createGlasses(character: THREE.Group, head: THREE.Object3D) {
+  const leftEye = character.getObjectByName("Bip01_LEye") ?? character.getObjectByName("Bip01 L Eye");
+  const rightEye = character.getObjectByName("Bip01_REye") ?? character.getObjectByName("Bip01 R Eye");
+  const nose = character.getObjectByName("Bip01_MNose") ?? character.getObjectByName("Bip01 M Nose");
+  if (!leftEye || !rightEye || !nose) return;
+
+  character.updateMatrixWorld(true);
+  head.updateWorldMatrix(true, false);
+  const left = leftEye.getWorldPosition(new THREE.Vector3());
+  const right = rightEye.getWorldPosition(new THREE.Vector3());
+  const nosePosition = nose.getWorldPosition(new THREE.Vector3());
+  const eyeCenter = left.clone().add(right).multiplyScalar(0.5);
+  const spacing = Math.max(left.distanceTo(right), 0.05);
+
+  const horizontal = left.sub(right).normalize();
+  const up = new THREE.Vector3(0, 1, 0);
+  const forward = horizontal.clone().cross(up).normalize();
+  if (forward.dot(nosePosition.sub(eyeCenter)) < 0) forward.negate();
+  const vertical = forward.clone().cross(horizontal).normalize();
+
+  const orientation = new THREE.Matrix4().makeBasis(horizontal, vertical, forward);
+  const worldOrientation = new THREE.Quaternion().setFromRotationMatrix(orientation);
+  const worldPosition = eyeCenter.clone().addScaledVector(forward, spacing * 0.42);
+  const worldMatrix = new THREE.Matrix4().compose(
+    worldPosition,
+    worldOrientation,
+    new THREE.Vector3(1, 1, 1),
+  );
   const group = new THREE.Group();
   group.name = "YanmarBlackRectangularGlasses";
-  group.position.set(0.116, 0.0699, 0);
-  group.quaternion.set(0, Math.SQRT1_2, 0, Math.SQRT1_2);
 
-  const frameMaterial = new THREE.MeshPhysicalMaterial({
-    color: "#101319",
-    metalness: 0.28,
-    roughness: 0.24,
-    clearcoat: 0.85,
-    clearcoatRoughness: 0.16,
+  const frame = new THREE.MeshStandardMaterial({
+    color: "#090c12",
+    metalness: 0.08,
+    roughness: 0.28,
   });
-  const lensMaterial = new THREE.MeshPhysicalMaterial({
-    color: "#8795b5",
-    metalness: 0.03,
-    roughness: 0.18,
+  const lens = new THREE.MeshPhysicalMaterial({
+    color: "#cbd7e8",
+    roughness: 0.24,
     transparent: true,
-    opacity: 0.17,
-    clearcoat: 1,
-    clearcoatRoughness: 0.08,
+    opacity: 0.055,
+    clearcoat: 0.7,
     depthWrite: false,
     side: THREE.DoubleSide,
   });
-  const frameGeometry = new THREE.ExtrudeGeometry(
-    (() => {
-      const outer = roundedFramePath(0.064, 0.046, 0.011);
-      const inner = roundedFramePath(0.052, 0.034, 0.008);
-      outer.holes.push(new THREE.Path(inner.getPoints(32).reverse()));
-      return outer;
-    })(),
-    { depth: 0.004, bevelEnabled: true, bevelSegments: 2, bevelSize: 0.001, bevelThickness: 0.001, curveSegments: 10 },
-  );
-  const lensGeometry = new THREE.PlaneGeometry(0.052, 0.034);
 
-  for (const center of [-0.034, 0.034]) {
-    const frame = new THREE.Mesh(frameGeometry, frameMaterial);
-    frame.position.set(center, 0, 0);
-    frame.castShadow = false;
-    group.add(frame);
+  const lensWidth = spacing * 0.84;
+  const lensHeight = spacing * 0.58;
+  const frameThickness = spacing * 0.065;
+  const outerWidth = lensWidth + frameThickness * 2;
+  const outerHeight = lensHeight + frameThickness * 2;
+  const centerOffset = spacing * 0.5;
+  const frameDepth = spacing * 0.075;
+  const templeLength = spacing * 1.5;
 
-    const lens = new THREE.Mesh(lensGeometry, lensMaterial);
-    lens.position.set(center, 0, 0.0015);
-    group.add(lens);
+  for (const center of [-centerOffset, centerOffset]) {
+    const outer = roundedRectangle(outerWidth, outerHeight, frameThickness * 1.5);
+    const inner = roundedRectangle(lensWidth, lensHeight, frameThickness * 0.65);
+    outer.holes.push(new THREE.Path(inner.getPoints(32).reverse()));
 
-    const hinge = new THREE.Mesh(
-      new THREE.BoxGeometry(0.008, 0.006, 0.009),
-      frameMaterial,
+    const rim = new THREE.Mesh(
+      new THREE.ExtrudeGeometry(outer, {
+        depth: frameDepth,
+        bevelEnabled: true,
+        bevelSegments: 2,
+        bevelSize: frameThickness * 0.08,
+        bevelThickness: frameThickness * 0.08,
+        steps: 1,
+      }),
+      frame,
     );
-    hinge.position.set(center + Math.sign(center) * 0.034, 0, 0.001);
-    group.add(hinge);
+    rim.position.x = center;
+    group.add(rim);
+
+    const lensMesh = new THREE.Mesh(
+      new THREE.PlaneGeometry(lensWidth, lensHeight),
+      lens,
+    );
+    lensMesh.position.set(center, 0, frameDepth + 0.001);
+    group.add(lensMesh);
 
     const temple = new THREE.Mesh(
-      new THREE.BoxGeometry(0.006, 0.007, 0.13),
-      frameMaterial,
+      new THREE.BoxGeometry(frameThickness, frameThickness, templeLength),
+      frame,
     );
-    temple.position.set(center + Math.sign(center) * 0.063, 0, -0.066);
+    temple.position.set(center + Math.sign(center) * outerWidth / 2, 0, -templeLength / 2);
     group.add(temple);
   }
 
   const bridge = new THREE.Mesh(
-    new THREE.BoxGeometry(0.024, 0.006, 0.005),
-    frameMaterial,
+    new THREE.BoxGeometry(spacing * 0.18, frameThickness, frameDepth),
+    frame,
   );
-  bridge.position.set(0, 0.001, 0.002);
+  bridge.position.z = frameDepth / 2;
   group.add(bridge);
 
-  return group;
+  group.matrixAutoUpdate = false;
+  group.matrix.copy(head.matrixWorld.clone().invert().multiply(worldMatrix));
+  group.matrixWorldNeedsUpdate = true;
+  head.add(group);
 }
 
 function crossfade(
@@ -162,22 +196,18 @@ export default function CharacterModel({ view }: { view: SceneView }) {
   const [modelGLTF, idleGLTF, waveGLTF, talkGLTF, thoughtfulGLTF, clapGLTF] =
     useGLTF([...ASSETS], false, true);
 
-  const [bodyMap, headMap, portraitMap] = useTexture([
-    "/models/yanmar-black-hoodie.webp",
-    "/models/yanmar-face-hair.webp",
-    "/models/yanmar-face-real.webp",
+  const [bodyMap, headMap] = useTexture([
+    "/models/yanmar-body-skin.png",
+    "/models/yanmar-face-skin-villanueva.png",
   ]);
   bodyMap.flipY = false;
-  headMap.flipY = false;
-  portraitMap.flipY = true;
   bodyMap.colorSpace = THREE.SRGBColorSpace;
+  headMap.flipY = false;
   headMap.colorSpace = THREE.SRGBColorSpace;
-  portraitMap.colorSpace = THREE.SRGBColorSpace;
-  bodyMap.needsUpdate = true;
   headMap.needsUpdate = true;
-  portraitMap.needsUpdate = true;
+  bodyMap.needsUpdate = true;
 
-  const { gl, viewport } = useThree();
+  const { gl, size } = useThree();
 
   const clips = useMemo(
     () =>
@@ -202,46 +232,6 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     clone.traverse((object) => {
       if (!(object instanceof THREE.Mesh)) return;
 
-      if (object instanceof THREE.SkinnedMesh) {
-        // Widen only vertices driven by the pelvis, thigh, and calf bones.
-        object.geometry = object.geometry.clone();
-        const positions = object.geometry.getAttribute("position");
-        const skinIndices = object.geometry.getAttribute("skinIndex");
-        const skinWeights = object.geometry.getAttribute("skinWeight");
-        const legBones = new Set<number>();
-
-        object.skeleton.bones.forEach((bone, index) => {
-          if (/Bip01 (?:Pelvis|[LR] Thigh|[LR] Calf)/i.test(bone.name)) {
-            legBones.add(index);
-          }
-        });
-
-        if (positions && skinIndices && skinWeights && legBones.size) {
-          for (let i = 0; i < positions.count; i += 1) {
-            const z = positions.getZ(i);
-            if (z > -0.12) continue;
-
-            let legInfluence = 0;
-            for (let k = 0; k < 4; k += 1) {
-              if (legBones.has(skinIndices.getComponent(i, k))) {
-                legInfluence += skinWeights.getComponent(i, k);
-              }
-            }
-
-            if (legInfluence <= 0.05) continue;
-            const looseFit = THREE.MathUtils.smoothstep(-z, 0.13, 0.32);
-            const widthScale = 1 + 0.14 * looseFit * Math.min(1, legInfluence);
-            positions.setX(i, positions.getX(i) * widthScale);
-          }
-
-          object.geometry.userData.yanmarWidened = true;
-          positions.needsUpdate = true;
-          object.geometry.computeVertexNormals();
-          object.geometry.computeBoundingBox();
-          object.geometry.computeBoundingSphere();
-        }
-      }
-
       object.castShadow = true;
       object.receiveShadow = true;
       object.frustumCulled = !(object instanceof THREE.SkinnedMesh);
@@ -259,60 +249,12 @@ export default function CharacterModel({ view }: { view: SceneView }) {
           }
           if (materialName.includes("head")) {
             material.map = headMap;
-            material.roughness = 0.72;
-            material.onBeforeCompile = (shader) => {
-              shader.uniforms.yanmarFacePortrait = { value: portraitMap };
-              shader.vertexShader = shader.vertexShader
-                .replace(
-                  "#include <common>",
-                  "#include <common>\nvarying vec3 vYanmarHeadPosition;",
-                )
-                .replace(
-                  "#include <begin_vertex>",
-                  "#include <begin_vertex>\nvYanmarHeadPosition = position;",
-                );
-              shader.fragmentShader = shader.fragmentShader
-                .replace(
-                  "#include <common>",
-                  "#include <common>\nuniform sampler2D yanmarFacePortrait;\nvarying vec3 vYanmarHeadPosition;",
-                )
-                .replace(
-                  "#include <map_fragment>",
-                  `#include <map_fragment>
-                  vec2 yanmarFaceUv = vec2(
-                    (vYanmarHeadPosition.x + 0.1) / 0.2,
-                    (vYanmarHeadPosition.z - 0.65) / 0.35
-                  );
-                  float yanmarFaceBounds =
-                    step(0.0, yanmarFaceUv.x) *
-                    step(yanmarFaceUv.x, 1.0) *
-                    step(0.0, yanmarFaceUv.y) *
-                    step(yanmarFaceUv.y, 1.0);
-                  float yanmarFaceFront = smoothstep(
-                    0.01,
-                    0.04,
-                    -vYanmarHeadPosition.y
-                  );
-                  vec4 yanmarFaceSample = sRGBTransferEOTF(texture2D(
-                    yanmarFacePortrait,
-                    yanmarFaceUv
-                  ));
-                  float yanmarFaceBlend =
-                    yanmarFaceSample.a * yanmarFaceFront * yanmarFaceBounds;
-                  diffuseColor.rgb = mix(
-                    diffuseColor.rgb,
-                    yanmarFaceSample.rgb,
-                    yanmarFaceBlend
-                  );`,
-                );
-            };
-            material.customProgramCacheKey = () => "yanmar-real-face-projection-v1";
+            material.color.set("#ffffff");
+            material.roughness = 0.82;
+            material.metalness = 0;
           }
           material.needsUpdate = true;
-          material.envMapIntensity = materialName.includes("head") ? 1.25 : 0.8;
-          material.roughness = material.name.toLowerCase().includes("head")
-            ? Math.min(material.roughness, 0.58)
-            : material.roughness;
+          material.envMapIntensity = materialName.includes("head") ? 0.55 : 0.8;
 
           for (const texture of [
             material.map,
@@ -320,7 +262,6 @@ export default function CharacterModel({ view }: { view: SceneView }) {
             material.roughnessMap,
             material.metalnessMap,
             material.emissiveMap,
-            portraitMap,
           ]) {
             if (texture) texture.anisotropy = anisotropy;
           }
@@ -335,11 +276,23 @@ export default function CharacterModel({ view }: { view: SceneView }) {
         : copyMaterial(object.material);
     });
 
-    const head = clone.getObjectByName("Bip01 Head");
-    if (head) head.add(createGlasses());
+    for (const name of ["Bip01 L Thigh", "Bip01 R Thigh", "Bip01 L Calf", "Bip01 R Calf"]) {
+      const bone = clone.getObjectByName(name) ?? clone.getObjectByName(name.replaceAll(" ", "_"));
+      if (bone) {
+        bone.scale.y *= 1.08;
+        bone.scale.z *= 1.08;
+      }
+    }
+
+    const head = clone.getObjectByName("Bip01 Head") ?? clone.getObjectByName("Bip01_Head");
+    if (head) {
+      head.scale.multiply(new THREE.Vector3(1, 0.98, 1.12));
+      clone.updateMatrixWorld(true);
+      createGlasses(clone, head);
+    }
 
     return clone;
-  }, [bodyMap, gl, headMap, modelGLTF.scene, portraitMap]);
+  }, [bodyMap, gl, headMap, modelGLTF.scene]);
 
   const mixer = useMemo(() => new THREE.AnimationMixer(character), [character]);
 
@@ -347,7 +300,6 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     return () => {
       character.traverse((object) => {
         if (!(object instanceof THREE.Mesh)) return;
-        if (object.geometry.userData.yanmarWidened) object.geometry.dispose();
         const materials = Array.isArray(object.material) ? object.material : [object.material];
         materials.forEach((material) => material.dispose());
       });
@@ -369,8 +321,8 @@ export default function CharacterModel({ view }: { view: SceneView }) {
   const spineBase = useMemo(() => new THREE.Quaternion(), []);
   const headEuler = useMemo(() => new THREE.Euler(0, 0, 0, "YXZ"), []);
   const offsetAxis = useMemo(() => new THREE.Vector3(1, 0, 0), []);
-  const headBone = useMemo(() => character.getObjectByName("Bip01 Head"), [character]);
-  const spineBone = useMemo(() => character.getObjectByName("Bip01 Spine"), [character]);
+  const headBone = useMemo(() => character.getObjectByName("Bip01 Head") ?? character.getObjectByName("Bip01_Head"), [character]);
+  const spineBone = useMemo(() => character.getObjectByName("Bip01 Spine") ?? character.getObjectByName("Bip01_Spine"), [character]);
 
   const actions = useMemo(
     () => ({
@@ -412,10 +364,10 @@ export default function CharacterModel({ view }: { view: SceneView }) {
   }, [actions, mixer, transition]);
 
   useEffect(() => {
-    if (view === "home") transition(actions.wave, false, 0.92);
-    if (view === "about") transition(actions.talk ?? actions.idle, true, 0.88);
+    if (view === "home") transition(actions.idle, true);
+    if (view === "about") transition(actions.talk ?? actions.thoughtful ?? actions.idle, false, 0.88);
     if (view === "projects") transition(actions.clap ?? actions.idle, false, 0.92);
-    if (view === "contact") transition(actions.thoughtful ?? actions.wave ?? actions.idle, false, 0.9);
+    if (view === "contact") transition(actions.wave ?? actions.thoughtful ?? actions.idle, false, 0.9);
   }, [view, actions, transition]);
 
   useFrame(({ camera, clock, pointer }, delta) => {
@@ -429,7 +381,7 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     }
 
     const sceneTime = elapsed - sceneStart.current;
-    const mobile = viewport.width < 6.1;
+    const mobile = size.width < 768 || gl.domElement.clientWidth < 768 || window.innerWidth < 768;
     const pose = SCENE_POSES[view];
 
     cursor.current.x = THREE.MathUtils.damp(cursor.current.x, pointer.x, 3.2, dt);
@@ -454,8 +406,8 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     cameraPosition.set(...pose.camera);
     lookTarget.set(...pose.look);
     if (mobile) {
-      cameraPosition.set(0, 0.12, 9.45);
-      lookTarget.set(0, -0.28, 0);
+      cameraPosition.set(0, -1.4, 7);
+      lookTarget.set(0, -1.4, 0);
     }
 
     const cameraEase = 1 - Math.exp(-dt * 2.15);
@@ -465,7 +417,7 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     camera.quaternion.slerp(cameraHelper.quaternion, cameraEase);
 
     if (camera instanceof THREE.PerspectiveCamera) {
-      const targetFov = mobile ? 39 : Math.max(34, pose.fov - 1);
+      const targetFov = mobile ? 32 : pose.fov;
       const nextFov = THREE.MathUtils.damp(camera.fov, targetFov, 2.2, dt);
       if (Math.abs(nextFov - camera.fov) > 0.001) {
         camera.fov = nextFov;
@@ -476,11 +428,11 @@ export default function CharacterModel({ view }: { view: SceneView }) {
     if (!root.current) return;
 
     characterTarget.set(...pose.character);
-    if (mobile) characterTarget.set(0, -1.9, 0);
+    if (mobile) characterTarget.set(0, -2.1, 0);
 
     characterTarget.y += Math.sin(elapsed * 1.05) * 0.018;
     root.current.position.lerp(characterTarget, 1 - Math.exp(-dt * 3));
-    root.current.scale.setScalar(mobile ? 1.62 : 1.58);
+    root.current.scale.setScalar(mobile ? 1 : 1.58);
 
     const turn = view === "projects" ? -0.1 : view === "about" ? 0.08 : 0.025;
     root.current.rotation.y = THREE.MathUtils.damp(

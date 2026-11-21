@@ -1,6 +1,7 @@
 "use client";
 
 import { Canvas } from "@react-three/fiber";
+import Image from "next/image";
 import { ContactShadows, Environment, Lightformer, Html } from "@react-three/drei";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,7 +15,7 @@ import CharacterModel from "@/components/CharacterModel";
 
 const greetings = [
   { kicker: "SYSTEM ONLINE", title: "Welcome, visitor.", body: "This is Yanmar's portfolio. Take a look around and explore what he has built." },
-  { kicker: "DISCOVER MORE", title: "Curious what I've built?", body: "Choose Projects on the left and I'll bring the work into view." },
+  { kicker: "DISCOVER MORE", title: "Curious what I've built?", body: "Choose Projects in the menu and I'll bring the work into view." },
   { kicker: "LET'S CONNECT", title: "Have something in mind?", body: "Questions, collaborations, or opportunities? I can help you reach Yanmar." },
 ];
 
@@ -71,12 +72,16 @@ function AboutPanel() {
           type="button"
           onClick={() => setPortraitOpen(true)}
           aria-label="View Yanmar's portrait"
-          className="group relative h-[112px] w-[88px] shrink-0 overflow-hidden rounded-xl border border-white/15 bg-white/5 shadow-lg"
+          className="group relative h-[140px] w-[112px] shrink-0 overflow-hidden rounded-xl border border-white/15 bg-white/5 shadow-lg"
         >
-          <img
+          <Image
             src="/images/yian.jpg"
             alt="Yanmar Villanueva"
-            className="h-full w-full object-cover object-center transition duration-500 group-hover:scale-105"
+            fill
+            sizes="112px"
+            priority
+            unoptimized
+            className="object-cover object-center transition duration-500 group-hover:scale-105"
           />
           <span className="absolute inset-x-0 bottom-0 bg-black/65 px-2 py-1.5 font-mono text-[8px] tracking-[.13em] text-white/80">VIEW PHOTO</span>
         </button>
@@ -122,15 +127,21 @@ function AboutPanel() {
           >
             Close
           </button>
-          <motion.img
-            src="/images/yian.jpg"
-            alt="Yanmar Villanueva"
+          <motion.div
             initial={{ opacity: 0, scale: 0.94, y: 12 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96 }}
             onClick={(event) => event.stopPropagation()}
-            className="max-h-[82vh] max-w-[min(88vw,620px)] rounded-2xl border border-white/15 object-contain shadow-2xl"
-          />
+            className="relative aspect-square w-full max-w-[min(88vw,620px)] overflow-hidden rounded-2xl border border-white/15 shadow-2xl"
+          >
+            <Image
+              src="/images/yian.jpg"
+              alt="Yanmar Villanueva"
+              fill
+              sizes="(max-width: 768px) 88vw, 620px"
+              className="object-contain"
+            />
+          </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
@@ -197,7 +208,7 @@ export default function InteractiveExperience() {
       dpr={[1, 1.45]}
       camera={{ position: [0, 0.25, 9.2], fov: 36, near: 0.1, far: 80 }}
       gl={{ alpha: false, antialias: true, powerPreference: "high-performance", stencil: false, depth: true }}
-      shadows="soft"
+      shadows="percentage"
       onCreated={({ gl }) => { gl.setClearColor("#080e18", 1); gl.outputColorSpace = "srgb"; gl.toneMapping = THREE.ACESFilmicToneMapping; gl.toneMappingExposure = 1.12; gl.domElement.addEventListener("webglcontextlost", () => setWebglFailed(true), { once: true }); }}
       onError={() => setWebglFailed(true)}
       fallback={<div className="absolute inset-0 grid place-items-center bg-[#080e18] text-xs text-white/50">3D preview is unavailable in this browser.</div>}
