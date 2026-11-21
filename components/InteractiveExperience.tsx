@@ -162,7 +162,8 @@ function ProjectsPanel() {
         <div className="mt-3 flex flex-wrap gap-1.5">{project.tags.slice(0, 3).map((tag) => <span key={tag} className="rounded-full bg-white/[.05] px-2 py-1 text-[8px] text-white/45">{tag}</span>)}</div>
         <div className="mt-4 flex gap-3 border-t border-white/[.08] pt-3">
           {project.liveUrl && <a href={project.liveUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[9px] font-bold uppercase tracking-[.1em] text-[#ffd700] hover:text-white">Live preview <ExternalLink size={11} /></a>}
-          {project.repoUrl && <a href={project.repoUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[.1em] text-white/45 hover:text-white">Source <Github size={11} /></a>}
+          {project.sourcePrivate && <span className="inline-flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[.1em] text-white/35">Private source</span>}
+          {project.repoUrl && !project.sourcePrivate && <a href={project.repoUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1.5 text-[9px] font-semibold uppercase tracking-[.1em] text-white/45 hover:text-white">Source <Github size={11} /></a>}
         </div>
       </motion.article>)}
     </div>
